@@ -78,11 +78,13 @@ contains
 
     currentPatch => site_in%oldest_patch
 
-    do while (associated(currentPatch))   
+    do while (associated(currentPatch))
+       write(fates_log(),*) 'while loop: LUvLSj'
 
        currentCohort => currentPatch%shortest
 
-       do while(associated(currentCohort))        
+       do while(associated(currentCohort))
+          write(fates_log(),*) 'while loop: KJOG1F'
           ! Mortality for trees in the understorey.
           currentCohort%patchptr => currentPatch
 
@@ -127,6 +129,7 @@ contains
           ! Go through and zero the diagnostic rates
           currentCohort => currentPatch%shortest
           do while(associated(currentCohort))
+             write(fates_log(),*) 'while loop: HsLOGf'
              if(currentCohort%canopy_layer == 1)then
                 currentCohort%cmort=0.0_r8
                 currentCohort%hmort=0.0_r8
@@ -225,6 +228,7 @@ contains
 
     site_areadis = 0.0_r8
     do while(associated(currentPatch))
+       write(fates_log(),*) 'while loop: Nza0Po'
 
        !FIX(RF,032414) Does using the max(fire,mort) actually make sense here?
        site_areadis = site_areadis + currentPatch%area * min(1.0_r8,currentPatch%disturbance_rate) 
@@ -256,7 +260,8 @@ contains
 
        currentPatch => currentSite%oldest_patch
        ! loop round all the patches that contribute surviving indivduals and litter pools to the new patch.     
-       do while(associated(currentPatch))   
+       do while(associated(currentPatch))
+          write(fates_log(),*) 'while loop: Wbf10A'
           patch_site_areadis = currentPatch%area * currentPatch%disturbance_rate ! how much land is disturbed in this donor patch? 
 
           call average_patch_properties(currentPatch, new_patch, patch_site_areadis)  ! MAY BE REDUNDANT CALL
@@ -268,7 +273,8 @@ contains
 
           !INSERT SURVIVORS FROM DISTURBANCE INTO NEW PATCH 
           currentCohort => currentPatch%shortest
-          do while(associated(currentCohort))       
+          do while(associated(currentCohort))
+             write(fates_log(),*) 'while loop: k2PcnA'
 
              allocate(nc)             
              if(use_fates_plant_hydro) call InitHydrCohort(nc)
@@ -461,6 +467,7 @@ contains
     areatot = 0._r8
     currentPatch => currentSite%oldest_patch
     do while(associated(currentPatch))
+       write(fates_log(),*) 'while loop: Z11rjp'
        areatot = areatot + currentPatch%area
        currentPatch => currentPatch%younger
        if (( areatot - area ) > 0._r8 ) then 
@@ -490,6 +497,7 @@ contains
     patchno = 1
     currentPatch => currentSite%oldest_patch
     do while(associated(currentPatch))
+       write(fates_log(),*) 'while loop: 1qLyKL'
        currentPatch%patchno = patchno
        patchno = patchno + 1
        currentPatch => currentPatch%younger
@@ -603,6 +611,7 @@ contains
        !************************************/ 
        currentCohort => currentPatch%shortest
        do while(associated(currentCohort))
+          write(fates_log(),*) 'while loop: VGLKgk'
           p = currentCohort%pft
           if(EDPftvarcon_inst%woody(p) == 1)then !DEAD (FROM FIRE) TREES
              !************************************/ 
@@ -708,6 +717,7 @@ contains
        !************************************/ 
        currentCohort => new_patch%shortest
        do while(associated(currentCohort))
+          write(fates_log(),*) 'while loop: ZLUtJz'
 
           currentCohort%c_area = c_area(currentCohort) 
           if(EDPftvarcon_inst%woody(currentCohort%pft) == 1)then
@@ -774,7 +784,8 @@ contains
     canopy_mortality_root_litter(:)  = 0.0_r8
 
     currentCohort => currentPatch%shortest
-    do while(associated(currentCohort))       
+    do while(associated(currentCohort))
+       write(fates_log(),*) 'while loop: LEso89'
        p = currentCohort%pft
        if(currentPatch%disturbance_rates(1) > currentPatch%disturbance_rates(2))then !mortality is dominant disturbance 
           if(currentCohort%canopy_layer == 1)then         
@@ -1106,6 +1117,7 @@ contains
     nopatches = 0
     currentPatch => currentSite%youngest_patch
     do while(associated(currentPatch))
+       write(fates_log(),*) 'while loop: 71seSP'
        nopatches = nopatches +1
        currentPatch => currentPatch%older
     enddo
@@ -1124,6 +1136,7 @@ contains
        !---------------------------------------------------------------------!  
        currentPatch => currentSite%youngest_patch
        do while(associated(currentPatch))
+          write(fates_log(),*) 'while loop: L2NfvM'
           call patch_pft_size_profile(currentPatch)
           currentPatch => currentPatch%older
        enddo
@@ -1132,9 +1145,11 @@ contains
        ! Loop round current & target (currentPatch,tpp) patches to assess combinations !
        !---------------------------------------------------------------------!   
        currentPatch => currentSite%youngest_patch
-       do while(associated(currentPatch))      
+       do while(associated(currentPatch))
+          write(fates_log(),*) 'while loop: fjcsyq'
           tpp => currentSite%youngest_patch
           do while(associated(tpp))
+             write(fates_log(),*) 'while loop: yaeAWi'
 
              if(.not.associated(currentPatch))then
                 write(fates_log(),*) 'ED: issue with currentPatch'
@@ -1200,6 +1215,7 @@ contains
        nopatches = 0
        currentPatch => currentSite%youngest_patch
        do while(associated(currentPatch))
+          write(fates_log(),*) 'while loop: wdLXpK'
           nopatches = nopatches +1
           currentPatch => currentPatch%older
        enddo
@@ -1313,6 +1329,7 @@ contains
        endif
 
        do while(associated(dp%shortest))
+          write(fates_log(),*) 'while loop: LT6J7Z'
 
           storebigcohort   => rp%tallest
           storesmallcohort => rp%shortest
@@ -1419,7 +1436,8 @@ contains
     
     !fuse patches if one of them is very small.... 
     currentPatch => currentSite%youngest_patch
-    do while(associated(currentPatch)) 
+    do while(associated(currentPatch))
+       write(fates_log(),*) 'while loop: W46sHq'
        if(currentPatch%area <= min_patch_area)then
           if ( currentPatch%patchno /= currentSite%youngest_patch%patchno) then
             ! Do not force the fusion of the youngest patch to its neighbour. 
@@ -1449,6 +1467,7 @@ contains
     areatot = 0._r8
     currentPatch => currentSite%oldest_patch
     do while(associated(currentPatch))
+       write(fates_log(),*) 'while loop: idLoC9'
        areatot = areatot + currentPatch%area
        currentPatch => currentPatch%younger
        if((areatot-area) > 0.0000001_r8)then
@@ -1474,6 +1493,7 @@ contains
     ! -----------------------------------------------------------------------------------
     ccohort => cpatch%shortest
     do while(associated(ccohort))
+       write(fates_log(),*) 'while loop: 1Qs62v'
        
        ncohort => ccohort%taller
        if(use_fates_plant_hydro) call DeallocateHydrCohort(ccohort)
@@ -1545,7 +1565,8 @@ contains
     enddo
 
     currentCohort => currentPatch%shortest
-    do while(associated(currentCohort))    
+    do while(associated(currentCohort))
+       write(fates_log(),*) 'while loop: T1VntF'
        do j = 1,N_DBH_BINS   
           if((currentCohort%dbh  >  mind(j)) .AND. (currentCohort%dbh  <=  maxd(j)))then
 
@@ -1586,6 +1607,7 @@ contains
     do s = 1,nsites
        currentPatch => sites(s)%oldest_patch
        do while(associated(currentPatch))
+          write(fates_log(),*) 'while loop: GO3Djk'
           totNumPatches = totNumPatches + 1
           currentPatch => currentPatch%younger
        enddo

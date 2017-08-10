@@ -1306,6 +1306,7 @@ contains
          ipa = 0
          cpatch => sites(s)%oldest_patch
          do while(associated(cpatch))
+            write(fates_log(),*) 'while loop: GrddU3'
             
             io_pa = io_pa1 + ipa
 
@@ -1325,6 +1326,7 @@ contains
             
             ccohort => cpatch%shortest
             do while(associated(ccohort))
+               write(fates_log(),*) 'while loop: JaNEq3'
                
                ft = ccohort%pft
                
@@ -1912,6 +1914,7 @@ contains
          patch_area_by_age(:) = 0._r8
 
          do while(associated(cpatch))
+            write(fates_log(),*) 'while loop: RZ9eR4'
             
             io_pa = io_pa1 + ipa
 
@@ -1919,6 +1922,7 @@ contains
 
             ccohort => cpatch%shortest
             do while(associated(ccohort))
+               write(fates_log(),*) 'while loop: sHAY82'
                
                ! TODO: we need a standardized logical function on this (used lots, RGK)
                if ((cpatch%area .gt. 0._r8) .and. (cpatch%total_canopy_area .gt. 0._r8)) then
@@ -2241,8 +2245,10 @@ contains
 
          cpatch => sites(s)%oldest_patch
          do while(associated(cpatch))
+            write(fates_log(),*) 'while loop: 7c6oMx'
             ccohort => cpatch%shortest
             do while(associated(ccohort))
+               write(fates_log(),*) 'while loop: DeSBDc'
                if ( .not. ccohort%isnew ) then
                   ! Calculate index for the scpf class
                   iscpf = ccohort%size_by_pft_class
@@ -2257,11 +2263,13 @@ contains
          ipa = 0
          cpatch => sites(s)%oldest_patch
          do while(associated(cpatch))
+            write(fates_log(),*) 'while loop: V98HW3'
             
             io_pa = io_pa1 + ipa
 
             ccohort => cpatch%shortest
             do while(associated(ccohort))
+               write(fates_log(),*) 'while loop: cK7KAS'
 
                ccohort_hydr => ccohort%co_hydr
                

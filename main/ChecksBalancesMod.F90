@@ -57,6 +57,7 @@ contains
          
          currentPatch => sites(s)%oldest_patch
          do while(associated(currentPatch))
+            write(fates_log(),*) 'while loop: Datdlw'
             
             ! map litter, CWD, and seed pools to column level
             sites(s)%cwd_stock = sites(s)%cwd_stock + &
@@ -69,6 +70,7 @@ contains
             
             currentCohort => currentPatch%tallest
             do while(associated(currentCohort))
+               write(fates_log(),*) 'while loop: iFhSj1'
                ! for quantities that are natively at column level or higher, 
                ! calculate plant density using whole area (for grid cell averages)
                n_perm2   = currentCohort%n/AREA                    
@@ -113,6 +115,7 @@ contains
             
             currentPatch => sites(s)%oldest_patch
             do while(associated(currentPatch))
+               write(fates_log(),*) 'while loop: GofGUD'
                !
                sites(s)%fates_to_bgc_this_ts = sites(s)%fates_to_bgc_this_ts + &
                      (sum(currentPatch%CWD_AG_out) + sum(currentPatch%CWD_BG_out) + &

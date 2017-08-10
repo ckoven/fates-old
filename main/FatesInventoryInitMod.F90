@@ -299,6 +299,7 @@ contains
                else
                   currentpatch => sites(s)%youngest_patch
                   do while(associated(currentpatch))
+                     write(fates_log(),*) 'while loop: XMI5IU'
                      olderpatch => currentpatch%older
                      if(associated(currentpatch%older)) then
                         if(newpatch%age >= currentpatch%age .and. &
@@ -330,6 +331,7 @@ contains
             write(fates_log(),*) 'Raw List of Inventory Patches, Age Sorted:'
             currentpatch => sites(s)%youngest_patch
             do while(associated(currentpatch))
+               write(fates_log(),*) 'while loop: fJZNa4'
                write(fates_log(),*) ' AGE: ',currentpatch%age,' AREA: ',currentpatch%area
                currentPatch => currentpatch%older
             enddo
@@ -372,8 +374,10 @@ contains
          basal_area_pref = 0.0_r8
          currentpatch => sites(s)%youngest_patch
          do while(associated(currentpatch))
+            write(fates_log(),*) 'while loop: eXZJQg'
             currentcohort => currentpatch%tallest
             do while(associated(currentcohort))
+               write(fates_log(),*) 'while loop: OytHI1'
                basal_area_pref = basal_area_pref + &
                      currentcohort%n*0.25*((currentcohort%dbh/100.0_r8)**2.0_r8)*pi_const
                currentcohort => currentcohort%shorter
@@ -393,6 +397,7 @@ contains
          total_cohorts = 0
          currentpatch => sites(s)%youngest_patch
          do while(associated(currentpatch))
+            write(fates_log(),*) 'while loop: IO8j4B'
             currentpatch%patchno = ipa
             ipa=ipa+1
             
@@ -419,8 +424,10 @@ contains
          basal_area_postf = 0.0_r8
          currentpatch => sites(s)%youngest_patch
          do while(associated(currentpatch))
+            write(fates_log(),*) 'while loop: aSDqpX'
             currentcohort => currentpatch%tallest
             do while(associated(currentcohort))
+               write(fates_log(),*) 'while loop: DijMye'
                basal_area_postf = basal_area_postf + &
                      currentcohort%n*0.25*((currentcohort%dbh/100.0_r8)**2.0_r8)*pi_const
                currentcohort => currentcohort%shorter

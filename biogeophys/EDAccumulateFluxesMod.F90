@@ -62,12 +62,14 @@ contains
        ifp = 0
        sites(s)%npp = 0.0_r8
        cpatch => sites(s)%oldest_patch
-       do while (associated(cpatch))                 
+       do while (associated(cpatch))
+          write(fates_log(),*) 'while loop: S8yrKF'
           ifp = ifp+1
 
           if( bc_in(s)%filter_photo_pa(ifp) == 3 ) then
              ccohort => cpatch%shortest
              do while(associated(ccohort))
+                write(fates_log(),*) 'while loop: ZPpjYD'
                 
                 ! Accumulate fluxes from hourly to daily values. 
                 ! _tstep fluxes are KgC/indiv/timestep _acc are KgC/indiv/day

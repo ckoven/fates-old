@@ -126,7 +126,8 @@ contains
 
            ifp = 0
            cpatch => sites(s)%oldest_patch
-           do while (associated(cpatch))                 
+           do while (associated(cpatch))
+              write(fates_log(),*) 'while loop: 6Qk7Fi'
               ifp=ifp+1
               
               ! THIS SHOULD REALLY BE A COHORT LOOP ONCE WE HAVE rootfr_ft FOR COHORTS (RGK)
@@ -175,6 +176,7 @@ contains
               pftgs(:) = 0._r8
               ccohort => cpatch%tallest
               do while(associated(ccohort))
+                 write(fates_log(),*) 'while loop: PUH3YV'
                  pftgs(ccohort%pft) = pftgs(ccohort%pft) + ccohort%gscan * ccohort%n    
                  ccohort => ccohort%shorter
               enddo

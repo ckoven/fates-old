@@ -123,7 +123,8 @@ contains
     ! Section 1: Check  total canopy area.    
     !
     new_total_area_check = 0._r8
-    do while (associated(currentPatch)) ! Patch loop    
+    do while (associated(currentPatch)) ! Patch loop
+       write(fates_log(),*) 'while loop: JPvNS5'
 
        if (currentPatch%area .gt. min_patch_area) then  ! avoid numerical weirdness that shouldn't be happening anyway
 
@@ -137,7 +138,8 @@ contains
           z = 1 
           arealayer = 0.0_r8
           currentCohort => currentPatch%tallest
-          do while (associated(currentCohort))  
+          do while (associated(currentCohort))
+             write(fates_log(),*) 'while loop: xYl69s'
              currentCohort%c_area = c_area(currentCohort) ! Reassess cohort area. 
              arealayer(currentCohort%canopy_layer) = arealayer(currentCohort%canopy_layer) + currentCohort%c_area
              z = max(z,currentCohort%canopy_layer) ! What is the current number of canopy layers? 
@@ -164,6 +166,7 @@ contains
                 sumdiff(i) = 0.0_r8    
                 currentCohort => currentPatch%tallest 
                 do while (associated(currentCohort))
+                   write(fates_log(),*) 'while loop: 10Lbsy'
                    currentCohort%c_area = c_area(currentCohort)
                    if(arealayer(i) > currentPatch%area.and.currentCohort%canopy_layer == i)then
                       currentCohort%excl_weight = 1.0_r8/(currentCohort%dbh**ED_val_comp_excln)  
@@ -178,6 +181,7 @@ contains
                  
                 ! Correct the demoted cohorts for  
                 do while (associated(currentCohort))
+                   write(fates_log(),*) 'while loop: FOyWV3'
                    if(currentCohort%canopy_layer  ==  i) then
                       weight = currentCohort%excl_weight/sumdiff(i)     
                       currentCohort%excl_weight = min(currentCohort%c_area/lossarea, weight)
@@ -187,7 +191,8 @@ contains
                 enddo
 
                 currentCohort => currentPatch%tallest
-                do while (associated(currentCohort))      
+                do while (associated(currentCohort))
+                   write(fates_log(),*) 'while loop: s9REHf'
                    if(currentCohort%canopy_layer == i)then !All the trees in this layer need to lose some area...
                       weight = currentCohort%excl_weight/sum_weights(i)
                       cc_loss = lossarea*weight !what this cohort has to lose. 
@@ -364,7 +369,8 @@ contains
           z = 1
           arealayer = 0.0_r8
           currentCohort => currentPatch%tallest
-          do while (associated(currentCohort))  
+          do while (associated(currentCohort))
+             write(fates_log(),*) 'while loop: 4nQhiX'
              currentCohort%c_area = c_area(currentCohort)
              arealayer(currentCohort%canopy_layer) = arealayer(currentCohort%canopy_layer) + currentCohort%c_area
              z = max(z,currentCohort%canopy_layer)
@@ -398,6 +404,7 @@ contains
           checkarea = 0.0_r8
           currentCohort => currentPatch%tallest
           do while (associated(currentCohort))
+             write(fates_log(),*) 'while loop: 32mHIm'
              if(currentCohort%canopy_layer == i)then
                 checkarea = checkarea + c_area(currentCohort)
              endif
@@ -429,7 +436,8 @@ contains
                 if(arealayer(i+1) <= 0.000001_r8)then
                    currentCohort => currentPatch%tallest 
                    arealayer = 0._r8
-                   do while (associated(currentCohort))            
+                   do while (associated(currentCohort))
+                      write(fates_log(),*) 'while loop: aH2QI1'
                       if(currentCohort%canopy_layer == i+1)then !look at the cohorts in the canopy layer below... 
                          currentCohort%canopy_layer = i   
                          currentCohort%c_area = c_area(currentCohort)
@@ -456,6 +464,7 @@ contains
                 ! This is the opposite of the demotion weighting... 
                 currentCohort => currentPatch%tallest 
                 do while (associated(currentCohort))
+                   write(fates_log(),*) 'while loop: 1rcvMQ'
                    currentCohort%c_area = c_area(currentCohort)
                    if(currentCohort%canopy_layer == i+1)then !look at the cohorts in the canopy layer below... 
                       currentCohort%prom_weight = currentCohort%dbh**ED_val_comp_excln   !as opposed to 1/(dbh^C_e) 
@@ -469,6 +478,7 @@ contains
                 currentCohort => currentPatch%tallest    !start from the tallest cohort
 
                 do while (associated(currentCohort))
+                   write(fates_log(),*) 'while loop: xTx8LD'
                    if(currentCohort%canopy_layer  ==  i+1) then !still looking at the layer beneath. 
                       weight = currentCohort%prom_weight/sumdiff(i)
                       if(promarea > 0._r8)then    
@@ -482,7 +492,8 @@ contains
                 enddo
 
                 currentCohort => currentPatch%tallest
-                do while (associated(currentCohort))      
+                do while (associated(currentCohort))
+                   write(fates_log(),*) 'while loop: 9w5qSM'
                    if(currentCohort%canopy_layer == i+1)then !All the trees in this layer need to promote some area upwards... 
                       lower_cohort_switch = 1
                       weight = currentCohort%prom_weight/sum_weights(i)
@@ -587,7 +598,8 @@ contains
           z = 1
           arealayer = 0.0_r8
           currentCohort => currentPatch%tallest
-          do while (associated(currentCohort))  
+          do while (associated(currentCohort))
+             write(fates_log(),*) 'while loop: 82lSsz'
              currentCohort%c_area = c_area(currentCohort)
              arealayer(currentCohort%canopy_layer) = arealayer(currentCohort%canopy_layer) + currentCohort%c_area
              z = max(z,currentCohort%canopy_layer)
@@ -626,6 +638,7 @@ contains
           checkarea = 0.0_r8
           currentCohort => currentPatch%tallest
           do while (associated(currentCohort))
+             write(fates_log(),*) 'while loop: ySHdjg'
              if(currentCohort%canopy_layer == i)then
                 checkarea = checkarea + c_area(currentCohort)
              endif
@@ -639,6 +652,7 @@ contains
                   i, z, missing_area 
              currentCohort => currentPatch%tallest
              do while (associated(currentCohort))
+                write(fates_log(),*) 'while loop: 1PQGDp'
              if(currentCohort%canopy_layer == i)then
                 write(fates_log(),*) 'c_areas in top layer', c_area(currentCohort)
              endif
@@ -699,11 +713,13 @@ contains
     currentPatch => currentSite%oldest_patch
 
     do while (associated(currentPatch))
+       write(fates_log(),*) 'while loop: In4y31'
 
        !calculate canopy area in each canopy storey...
        arealayer = 0.0_r8   
        currentCohort => currentPatch%tallest
        do while (associated(currentCohort))
+          write(fates_log(),*) 'while loop: E28JAM'
           currentCohort%c_area = c_area(currentCohort) 
           if(EDPftvarcon_inst%woody(currentCohort%pft) == 1)then
              arealayer(currentCohort%canopy_layer) = arealayer(currentCohort%canopy_layer) + currentCohort%c_area
@@ -786,6 +802,7 @@ contains
        currentPatch => sites(s)%oldest_patch
 
        do while(associated(currentPatch))
+          write(fates_log(),*) 'while loop: FIgjPt'
           
           call set_root_fraction(currentPatch,bc_in(s)%zi_sisl)
 
@@ -798,6 +815,7 @@ contains
           !update cohort quantitie s                                  
           currentCohort => currentPatch%shortest
           do while(associated(currentCohort))
+             write(fates_log(),*) 'while loop: wN57xa'
              
              ft = currentCohort%pft
 
@@ -838,6 +856,7 @@ contains
              currentCohort => currentCohort%taller
              
           enddo ! ends 'do while(associated(currentCohort))
+          write(fates_log(),*) 'while loop: 7WkFCq'
           
           if ( currentPatch%total_canopy_area-currentPatch%area > 0.000001_r8 ) then
              write(fates_log(),*) 'ED: canopy area bigger than area', &
@@ -909,13 +928,15 @@ contains
     
     currentPatch => currentSite%oldest_patch   ! ed patch
     do while(associated(currentPatch))
+       write(fates_log(),*) 'while loop: OZ5Jbi'
        
        !Calculate tree and canopy areas. 
        currentPatch%canopy_area = 0._r8
        currentPatch%canopy_layer_lai(:) = 0._r8
        NC = 0
        currentCohort => currentPatch%shortest
-       do while(associated(currentCohort))       
+       do while(associated(currentCohort))
+          write(fates_log(),*) 'while loop: wNsFyK'
           currentCohort%c_area = c_area(currentCohort)
           currentPatch%canopy_area = currentPatch%canopy_area + currentCohort%c_area
           NC = NC+1
@@ -929,7 +950,8 @@ contains
        currentPatch%nrad(:,:) = 0 
        currentPatch%lai = 0._r8
        currentCohort => currentPatch%shortest
-       do while(associated(currentCohort)) 
+       do while(associated(currentCohort))
+          write(fates_log(),*) 'while loop: nxGb5B'
           currentCohort%treelai = tree_lai(currentCohort)    
           currentCohort%treesai = tree_sai(currentCohort)
           currentCohort%lai =  currentCohort%treelai *currentCohort%c_area/currentPatch%canopy_area 
@@ -974,7 +996,8 @@ contains
           enddo
           
           currentCohort => currentPatch%shortest
-          do while(associated(currentCohort))  
+          do while(associated(currentCohort))
+             write(fates_log(),*) 'while loop: SeIaBC'
              ft = currentCohort%pft
              min_chite = currentCohort%hite - currentCohort%hite * EDecophyscon%crown(ft)
              max_chite = currentCohort%hite  
@@ -1031,7 +1054,8 @@ contains
           !check
           currentPatch%lai = 0._r8
           currentCohort => currentPatch%shortest
-          do while(associated(currentCohort)) 
+          do while(associated(currentCohort))
+             write(fates_log(),*) 'while loop: m8E6ah'
              currentPatch%lai = currentPatch%lai +currentCohort%lai
              currentCohort => currentCohort%taller   
           enddo !currentCohort
@@ -1057,7 +1081,8 @@ contains
           currentPatch%nrad(:,:) = 0 
           currentCohort => currentPatch%shortest
           
-          do while(associated(currentCohort))   
+          do while(associated(currentCohort))
+             write(fates_log(),*) 'while loop: DXKiW2'
              L = currentCohort%canopy_layer
              ft = currentCohort%pft 
              !Calculate the number of layers of thickness dlai, including the last one. 
@@ -1238,6 +1263,7 @@ contains
                 currentCohort => currentPatch%shortest
                 
                 do while(associated(currentCohort))
+                   write(fates_log(),*) 'while loop: ZA2lSQ'
                    
                    if(currentCohort%canopy_layer==1)then
                       write(fates_log(), *) 'ED: cohorts',currentCohort%dbh,currentCohort%c_area, &
@@ -1308,6 +1334,7 @@ contains
         currentPatch => sites(s)%oldest_patch
         c = fcolumn(s)
         do while(associated(currentPatch))
+           write(fates_log(),*) 'while loop: PTQGPa'
            ifp = ifp+1
 
            if ( currentPatch%total_canopy_area-currentPatch%area > 0.000001_r8 ) then
@@ -1331,7 +1358,8 @@ contains
 !           bc_out(s)%dleaf_pa(ifp) = 0.0_r8
 !           if(currentPatch%lai>1.0e-9_r8) then
 !              currentCohort => currentPatch%shortest
-!              do while(associated(currentCohort))
+           !              do while(associated(currentCohort))
+           ! write(fates_log(),*) 'while loop: fQqBVT'
 !                 weight = min(1.0_r8,currentCohort%lai/currentPatch%lai)
 !                 bc_out(s)%dleaf_pa(ifp) = bc_out(s)%dleaf_pa(ifp) + &
 !                       EDPftvarcon_inst%dleaf(currentCohort%pft)*weight

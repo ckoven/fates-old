@@ -129,7 +129,8 @@ contains
 
     if(do_ed_dynamics) then
        currentPatch => currentSite%oldest_patch
-       do while (associated(currentPatch))                 
+       do while (associated(currentPatch))
+          write(fates_log(),*) 'while loop: FdBqHp'
           
           ! adds small cohort of each PFT
           call recruitment(0, currentSite, currentPatch, bc_in)
@@ -144,6 +145,7 @@ contains
     if( do_ed_dynamics ) then
        currentPatch => currentSite%oldest_patch
        do while (associated(currentPatch))
+          write(fates_log(),*) 'while loop: JVG8ac'
           
           ! puts cohorts in right order
           call sort_cohorts(currentPatch)            
@@ -238,6 +240,7 @@ contains
     currentPatch => currentSite%youngest_patch
 
     do while(associated(currentPatch))
+       write(fates_log(),*) 'while loop: T5DcTy'
 
        currentPatch%age = currentPatch%age + hlm_freq_day
        ! FIX(SPM,032414) valgrind 'Conditional jump or move depends on uninitialised value'
@@ -254,7 +257,8 @@ contains
        
        ! Update Canopy Biomass Pools
        currentCohort => currentPatch%shortest
-       do while(associated(currentCohort)) 
+       do while(associated(currentCohort))
+          write(fates_log(),*) 'while loop: rfpXMz'
 
           cohort_biomass_store  = (currentCohort%balive+currentCohort%bdead+currentCohort%bstore)
           currentCohort%dbh    = max(small_no,currentCohort%dbh    + currentCohort%ddbhdt    * hlm_freq_day )
@@ -347,7 +351,8 @@ contains
        ! update cohort number. This needs to happen after the CWD_input and seed_input calculations as they 
        ! assume the pre-mortality currentCohort%n. 
        currentCohort => currentPatch%shortest
-       do while(associated(currentCohort)) 
+       do while(associated(currentCohort))
+          write(fates_log(),*) 'while loop: If5Njf'
          currentCohort%n = max(small_no,currentCohort%n + currentCohort%dndt * hlm_freq_day )  
          currentCohort => currentCohort%taller
        enddo
@@ -405,6 +410,7 @@ contains
 
     currentPatch => currentSite%oldest_patch
     do while(associated(currentPatch))
+       write(fates_log(),*) 'while loop: vUzKI1'
 
        ! Is termination really needed here? canopy_structure just called it several times! (rgk)
        call terminate_cohorts(currentSite, currentPatch, 1) 
@@ -482,12 +488,14 @@ contains
 
     currentPatch => currentSite%oldest_patch 
     do while(associated(currentPatch))
+       write(fates_log(),*) 'while loop: DQPJL4'
 
        litter_stock = litter_stock + currentPatch%area * (sum(currentPatch%cwd_ag)+ &
              sum(currentPatch%cwd_bg)+sum(currentPatch%leaf_litter)+sum(currentPatch%root_litter))
        currentCohort => currentPatch%tallest;
        
        do while(associated(currentCohort))
+          write(fates_log(),*) 'while loop: HSWUGd'
           
           biomass_stock =  biomass_stock + (currentCohort%bdead + currentCohort%balive + &
                 currentCohort%bstore) * currentCohort%n
@@ -541,8 +549,10 @@ contains
     
     currentPatch => currentSite%youngest_patch
     do while(associated(currentPatch))
+       write(fates_log(),*) 'while loop: FDhLO2'
        currentCohort => currentPatch%shortest
-       do while(associated(currentCohort)) 
+       do while(associated(currentCohort))
+          write(fates_log(),*) 'while loop: xUs6zR'
 
           currentCohort%isnew=.false.
 

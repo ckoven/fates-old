@@ -80,6 +80,7 @@ contains
     currentCohort => currentPatch%shortest
 
     do while(associated(currentCohort))
+       write(fates_log(),*) 'while loop: lVrqbs'
        call Growth_Derivatives(currentSite, currentCohort, bc_in )
        currentCohort => currentCohort%taller
     enddo
@@ -179,8 +180,10 @@ contains
     currentPatch => currentSite%youngest_patch
 
     do while(associated(currentPatch))
+       write(fates_log(),*) 'while loop: p81npH'
        currentCohort => currentPatch%tallest
-       do while (associated(currentCohort)) 
+       do while (associated(currentCohort))
+          write(fates_log(),*) 'while loop: sL3cC0'
           trimmed = 0    
           currentCohort%treelai = tree_lai(currentCohort)    
           currentCohort%nv = ceiling((currentCohort%treelai+currentCohort%treesai)/dinc_ed)
@@ -515,9 +518,11 @@ contains
 
     store_output  = 0.5_r8
 
-    do while(associated(currentPatch))    
+    do while(associated(currentPatch))
+       write(fates_log(),*) 'while loop: zz2z6a'
        currentCohort => currentPatch%tallest
-       do while(associated(currentCohort))        
+       do while(associated(currentCohort))
+          write(fates_log(),*) 'while loop: Ll7YU9'
                 
           !COLD LEAF ON
           if (EDPftvarcon_inst%season_decid(currentCohort%pft) == 1)then
@@ -644,8 +649,10 @@ contains
        npfts_present =  0._r8
        currentPatch => currentSite%oldest_patch
        do while(associated(currentPatch))
+          write(fates_log(),*) 'while loop: hp5D4d'
           currentCohort => currentPatch%tallest
           do while (associated(currentCohort))
+             write(fates_log(),*) 'while loop: qG9pFV'
              p = currentCohort%pft
              if (.not. pft_present(p)) then
                 pft_present(p) = .true.
@@ -660,6 +667,7 @@ contains
        currentPatch => cp_pnt
        currentCohort => currentPatch%tallest
        do while (associated(currentCohort))
+          write(fates_log(),*) 'while loop: H2gOjv'
           do p = 1, numpft_ed
              if (pft_present(p)) then
                 currentPatch%seeds_in(p) = currentPatch%seeds_in(p) +  currentCohort%seed_prod * currentCohort%n / &
@@ -673,6 +681,7 @@ contains
     ! normal case: each PFT seeds its own type
     currentCohort => currentPatch%tallest
     do while (associated(currentCohort))
+       write(fates_log(),*) 'while loop: GM8WyY'
        p = currentCohort%pft
        currentPatch%seeds_in(p) = currentPatch%seeds_in(p) +  &
              currentCohort%seed_prod * currentCohort%n/currentPatch%area
@@ -684,6 +693,7 @@ contains
     currentPatch => currentSite%oldest_patch
 
     do while(associated(currentPatch))
+       write(fates_log(),*) 'while loop: USe9tt'
        if (external_recruitment == 1) then !external seed rain - needed to prevent extinction  
           do p = 1,numpft_ed
            currentPatch%seeds_in(p) = currentPatch%seeds_in(p) + &
@@ -1119,6 +1129,7 @@ contains
     currentCohort => currentPatch%shortest
 
     do while(associated(currentCohort))
+       write(fates_log(),*) 'while loop: q4TO3q'
       pft = currentCohort%pft        
       ! ================================================        
       ! Litter from tissue turnover. KgC/m2/year
@@ -1580,13 +1591,15 @@ contains
          currentPatch => sites(s)%oldest_patch
          
          do while(associated(currentPatch))
+            write(fates_log(),*) 'while loop: GnHd7B'
             
             ! the CWD pools lose information about which PFT they came from; for the stems this doesn't matter as they all have the same profile, 
             ! however for the coarse roots they may have different profiles.  to approximately recover this information, loop over all cohorts in patch 
             ! to calculate the total root biomass in that patch of each pft, and then rescale the croot_prof as the weighted average of the froot_prof
             biomass_bg_ft(1:numpft_ed) = 0._r8
             currentCohort => currentPatch%tallest
-            do while(associated(currentCohort))      
+            do while(associated(currentCohort))
+               write(fates_log(),*) 'while loop: VNsiii'
                biomass_bg_ft(currentCohort%pft) = biomass_bg_ft(currentCohort%pft) + &
                     currentCohort%b * (currentCohort%n / currentPatch%area) * (1.0_r8-ED_val_ag_biomass)
                currentCohort => currentCohort%shorter

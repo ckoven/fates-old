@@ -143,7 +143,8 @@ contains
 
            ifp = 0
            currentpatch => sites(s)%oldest_patch
-           do while (associated(currentpatch))  
+           do while (associated(currentpatch))
+              write(fates_log(),*) 'while loop: K85RXU'
               ifp = ifp+1
               
               currentPatch%f_sun      (:,:,:) = 0._r8
@@ -957,7 +958,8 @@ contains
        ifp = 0
        cpatch => sites(s)%oldest_patch
 
-       do while (associated(cpatch))                 
+       do while (associated(cpatch))
+          write(fates_log(),*) 'while loop: PO4BT6'
           
           ifp=ifp+1
           

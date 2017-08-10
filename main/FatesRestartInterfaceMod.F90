@@ -1093,7 +1093,7 @@ contains
           patchespersite = 0
           
           do while(associated(cpatch))
-             
+             write(fates_log(),*) 'while loop: zcnk5U'
              ! found patch, increment
              patchespersite = patchespersite + 1
              
@@ -1103,6 +1103,7 @@ contains
              cohortsperpatch = 0
              
              do while(associated(ccohort))
+                write(fates_log(),*) 'while loop: oneM0x'
                 
                 ! found cohort, increment
                 cohortsperpatch = cohortsperpatch + 1
@@ -1653,6 +1654,7 @@ contains
           
           cpatch => sites(s)%oldest_patch
           do while(associated(cpatch))
+             write(fates_log(),*) 'while loop: D5eabr'
              
              patchespersite = patchespersite + 1
              
@@ -1661,7 +1663,8 @@ contains
              ! new patch, reset num cohorts
              cohortsperpatch = 0
              
-             do while(associated(ccohort))        
+             do while(associated(ccohort))
+                write(fates_log(),*) 'while loop: vGfVH5'
                 
                 ! found cohort, increment
                 cohortsperpatch  = cohortsperpatch    + 1

@@ -216,7 +216,8 @@ contains
          
          ifp = 0
          currentpatch => sites(s)%oldest_patch
-         do while (associated(currentpatch))  
+         do while (associated(currentpatch))
+            write(fates_log(),*) 'while loop: EPwYnV'
 
             ifp   = ifp+1
             NCL_p = currentPatch%NCL_p
@@ -317,6 +318,7 @@ contains
 
                   currentCohort => currentPatch%tallest
                   do while (associated(currentCohort)) ! Cohort loop
+                     write(fates_log(),*) 'while loop: gnvCg5'
                      
                      ! Identify the canopy layer (cl), functional type (ft)
                      ! and the leaf layer (IV) for this cohort
@@ -1332,7 +1334,7 @@ contains
       ! bug that is happening for site 125, FT13.
       currentCohort => currentPatch%tallest
       do while(associated(currentCohort))
-         
+         write(fates_log(),*) 'while loop: epc0r6'         
          currentPatch%ncan(currentCohort%canopy_layer,currentCohort%pft) = &
                max(currentPatch%ncan(currentCohort%canopy_layer,currentCohort%pft), &
                    currentCohort%NV)
