@@ -2,6 +2,7 @@ module ChecksBalancesMod
 
    use shr_kind_mod     , only : r8 => shr_kind_r8
    use shr_const_mod, only: SHR_CONST_CDAY
+   use FatesGlobals, only : fates_log
  
    implicit none
    
