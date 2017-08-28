@@ -32,6 +32,7 @@ module FATESPlantRespPhotosynthMod
    
    ! CIME Globals
    use shr_log_mod , only      : errMsg => shr_log_errMsg
+   use shr_sys_mod , only : shr_sys_flush
 
    implicit none
    private
@@ -216,6 +217,7 @@ contains
          currentpatch => sites(s)%oldest_patch
          do while (associated(currentpatch))
             write(fates_log(),*) 'while loop: EPwYnV'
+            call shr_sys_flush(fates_log())
 
             ifp   = ifp+1
             NCL_p = currentPatch%NCL_p
@@ -317,6 +319,7 @@ contains
                   currentCohort => currentPatch%tallest
                   do while (associated(currentCohort)) ! Cohort loop
                      write(fates_log(),*) 'while loop: gnvCg5'
+                     call shr_sys_flush(fates_log())
                      
                      ! Identify the canopy layer (cl), functional type (ft)
                      ! and the leaf layer (IV) for this cohort
@@ -1333,6 +1336,7 @@ contains
       currentCohort => currentPatch%tallest
       do while(associated(currentCohort))
          write(fates_log(),*) 'while loop: epc0r6'         
+         call shr_sys_flush(fates_log())
          currentPatch%ncan(currentCohort%canopy_layer,currentCohort%pft) = &
                max(currentPatch%ncan(currentCohort%canopy_layer,currentCohort%pft), &
                    currentCohort%NV)

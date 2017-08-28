@@ -3,6 +3,7 @@ module ChecksBalancesMod
    use shr_kind_mod     , only : r8 => shr_kind_r8
    use shr_const_mod, only: SHR_CONST_CDAY
    use FatesGlobals, only : fates_log
+   use shr_sys_mod , only : shr_sys_flush
  
    implicit none
    
@@ -59,6 +60,7 @@ contains
          currentPatch => sites(s)%oldest_patch
          do while(associated(currentPatch))
             write(fates_log(),*) 'while loop: Datdlw'
+            call shr_sys_flush(fates_log())
             
             ! map litter, CWD, and seed pools to column level
             sites(s)%cwd_stock = sites(s)%cwd_stock + &
@@ -72,6 +74,7 @@ contains
             currentCohort => currentPatch%tallest
             do while(associated(currentCohort))
                write(fates_log(),*) 'while loop: iFhSj1'
+               call shr_sys_flush(fates_log())
                ! for quantities that are natively at column level or higher, 
                ! calculate plant density using whole area (for grid cell averages)
                n_perm2   = currentCohort%n/AREA                    
@@ -117,6 +120,7 @@ contains
             currentPatch => sites(s)%oldest_patch
             do while(associated(currentPatch))
                write(fates_log(),*) 'while loop: GofGUD'
+               call shr_sys_flush(fates_log())
                !
                sites(s)%fates_to_bgc_this_ts = sites(s)%fates_to_bgc_this_ts + &
                      (sum(currentPatch%CWD_AG_out) + sum(currentPatch%CWD_BG_out) + &

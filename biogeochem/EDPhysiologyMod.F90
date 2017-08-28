@@ -31,6 +31,7 @@ module EDPhysiologyMod
   use FatesGlobals          , only : fates_log
   use FatesGlobals          , only : endrun => fates_endrun
   use EDParamsMod           , only : fates_mortality_disturbance_fraction
+  use shr_sys_mod , only : shr_sys_flush
 
   implicit none
   private
@@ -80,6 +81,7 @@ contains
 
     do while(associated(currentCohort))
        write(fates_log(),*) 'while loop: lVrqbs'
+       call shr_sys_flush(fates_log())
        call Growth_Derivatives(currentSite, currentCohort, bc_in )
        currentCohort => currentCohort%taller
     enddo
@@ -174,9 +176,11 @@ contains
 
     do while(associated(currentPatch))
        write(fates_log(),*) 'while loop: p81npH'
+       call shr_sys_flush(fates_log())
        currentCohort => currentPatch%tallest
        do while (associated(currentCohort))
           write(fates_log(),*) 'while loop: sL3cC0'
+          call shr_sys_flush(fates_log())
           trimmed = 0    
           currentCohort%treelai = tree_lai(currentCohort)    
           currentCohort%nv = ceiling((currentCohort%treelai+currentCohort%treesai)/dinc_ed)
@@ -520,9 +524,11 @@ contains
 
     do while(associated(currentPatch))
        write(fates_log(),*) 'while loop: zz2z6a'
+       call shr_sys_flush(fates_log())
        currentCohort => currentPatch%tallest
        do while(associated(currentCohort))
           write(fates_log(),*) 'while loop: Ll7YU9'
+          call shr_sys_flush(fates_log())
                 
           !COLD LEAF ON
           if (EDPftvarcon_inst%season_decid(currentCohort%pft) == 1)then
@@ -650,9 +656,11 @@ contains
        currentPatch => currentSite%oldest_patch
        do while(associated(currentPatch))
           write(fates_log(),*) 'while loop: hp5D4d'
+          call shr_sys_flush(fates_log())
           currentCohort => currentPatch%tallest
           do while (associated(currentCohort))
              write(fates_log(),*) 'while loop: qG9pFV'
+             call shr_sys_flush(fates_log())
              p = currentCohort%pft
              if (.not. pft_present(p)) then
                 pft_present(p) = .true.
@@ -668,6 +676,7 @@ contains
        currentCohort => currentPatch%tallest
        do while (associated(currentCohort))
           write(fates_log(),*) 'while loop: H2gOjv'
+          call shr_sys_flush(fates_log())
           do p = 1, numpft
              if (pft_present(p)) then
                 currentPatch%seeds_in(p) = currentPatch%seeds_in(p) +  currentCohort%seed_prod * currentCohort%n / &
@@ -682,6 +691,7 @@ contains
     currentCohort => currentPatch%tallest
     do while (associated(currentCohort))
        write(fates_log(),*) 'while loop: GM8WyY'
+       call shr_sys_flush(fates_log())
        p = currentCohort%pft
        currentPatch%seeds_in(p) = currentPatch%seeds_in(p) +  &
              currentCohort%seed_prod * currentCohort%n/currentPatch%area
@@ -694,6 +704,7 @@ contains
 
     do while(associated(currentPatch))
        write(fates_log(),*) 'while loop: USe9tt'
+       call shr_sys_flush(fates_log())
        if (external_recruitment == 1) then !external seed rain - needed to prevent extinction  
           do p = 1,numpft
            currentPatch%seeds_in(p) = currentPatch%seeds_in(p) + &
@@ -1129,6 +1140,7 @@ contains
 
     do while(associated(currentCohort))
        write(fates_log(),*) 'while loop: q4TO3q'
+       call shr_sys_flush(fates_log())
       pft = currentCohort%pft        
       ! ================================================        
       ! Litter from tissue turnover. KgC/m2/year
@@ -1588,6 +1600,7 @@ contains
          
          do while(associated(currentPatch))
             write(fates_log(),*) 'while loop: GnHd7B'
+            call shr_sys_flush(fates_log())
             
             ! the CWD pools lose information about which PFT they came from; for the stems this doesn't matter as they all have the same profile, 
             ! however for the coarse roots they may have different profiles.  to approximately recover this information, loop over all cohorts in patch 
@@ -1596,6 +1609,7 @@ contains
             currentCohort => currentPatch%tallest
             do while(associated(currentCohort))
                write(fates_log(),*) 'while loop: VNsiii'
+               call shr_sys_flush(fates_log())
                biomass_bg_ft(currentCohort%pft) = biomass_bg_ft(currentCohort%pft) + &
                     currentCohort%b * (currentCohort%n / currentPatch%area) * (1.0_r8-EDPftvarcon_inst%allom_agb_frac(currentCohort%pft))
                currentCohort => currentCohort%shorter

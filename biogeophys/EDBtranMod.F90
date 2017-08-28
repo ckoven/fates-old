@@ -19,6 +19,7 @@ module EDBtranMod
                                   numpft
    use FatesInterfaceMod , only : hlm_use_planthydro
    use FatesGlobals      , only : fates_log
+   use shr_sys_mod , only : shr_sys_flush
 
    !
    implicit none
@@ -131,6 +132,7 @@ contains
            cpatch => sites(s)%oldest_patch
            do while (associated(cpatch))
               write(fates_log(),*) 'while loop: 6Qk7Fi'
+              call shr_sys_flush(fates_log())
               ifp=ifp+1
               
               ! THIS SHOULD REALLY BE A COHORT LOOP ONCE WE HAVE rootfr_ft FOR COHORTS (RGK)
@@ -180,6 +182,7 @@ contains
               ccohort => cpatch%tallest
               do while(associated(ccohort))
                  write(fates_log(),*) 'while loop: PUH3YV'
+                 call shr_sys_flush(fates_log())
                  pftgs(ccohort%pft) = pftgs(ccohort%pft) + ccohort%gscan * ccohort%n    
                  ccohort => ccohort%shorter
               enddo

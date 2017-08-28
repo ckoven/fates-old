@@ -13,6 +13,7 @@ module EDAccumulateFluxesMod
   use FatesGlobals, only      : fates_log
   use shr_log_mod , only      : errMsg => shr_log_errMsg
   use FatesConstantsMod , only : r8 => fates_r8
+  use shr_sys_mod , only : shr_sys_flush
   implicit none
   private
   !
@@ -64,12 +65,14 @@ contains
        cpatch => sites(s)%oldest_patch
        do while (associated(cpatch))
           write(fates_log(),*) 'while loop: S8yrKF'
+          call shr_sys_flush(fates_log())
           ifp = ifp+1
 
           if( bc_in(s)%filter_photo_pa(ifp) == 3 ) then
              ccohort => cpatch%shortest
              do while(associated(ccohort))
                 write(fates_log(),*) 'while loop: ZPpjYD'
+                call shr_sys_flush(fates_log())
                 
                 ! Accumulate fluxes from hourly to daily values. 
                 ! _tstep fluxes are KgC/indiv/timestep _acc are KgC/indiv/day

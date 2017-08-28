@@ -14,6 +14,7 @@ module FatesRestartInterfaceMod
 
   ! CIME GLOBALS
   use shr_log_mod       , only : errMsg => shr_log_errMsg
+  use shr_sys_mod , only : shr_sys_flush
 
 
   implicit none
@@ -1094,6 +1095,7 @@ contains
           
           do while(associated(cpatch))
              write(fates_log(),*) 'while loop: zcnk5U'
+             call shr_sys_flush(fates_log())
              ! found patch, increment
              patchespersite = patchespersite + 1
              
@@ -1104,6 +1106,7 @@ contains
              
              do while(associated(ccohort))
                 write(fates_log(),*) 'while loop: oneM0x'
+                call shr_sys_flush(fates_log())
                 
                 ! found cohort, increment
                 cohortsperpatch = cohortsperpatch + 1
@@ -1653,6 +1656,7 @@ contains
           cpatch => sites(s)%oldest_patch
           do while(associated(cpatch))
              write(fates_log(),*) 'while loop: D5eabr'
+             call shr_sys_flush(fates_log())
              
              patchespersite = patchespersite + 1
              
@@ -1663,6 +1667,7 @@ contains
              
              do while(associated(ccohort))
                 write(fates_log(),*) 'while loop: vGfVH5'
+                call shr_sys_flush(fates_log())
                 
                 ! found cohort, increment
                 cohortsperpatch  = cohortsperpatch    + 1

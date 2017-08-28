@@ -26,6 +26,7 @@ module EDSurfaceRadiationMod
   
   ! CIME globals
   use shr_log_mod       , only : errMsg => shr_log_errMsg
+  use shr_sys_mod , only : shr_sys_flush
 
   implicit none
 
@@ -149,6 +150,7 @@ contains
            currentpatch => sites(s)%oldest_patch
            do while (associated(currentpatch))
               write(fates_log(),*) 'while loop: K85RXU'
+              call shr_sys_flush(fates_log())
               ifp = ifp+1
               
               currentPatch%f_sun      (:,:,:) = 0._r8
@@ -946,6 +948,7 @@ contains
 
        do while (associated(cpatch))
           write(fates_log(),*) 'while loop: PO4BT6'
+          call shr_sys_flush(fates_log())
           
           ifp=ifp+1
           

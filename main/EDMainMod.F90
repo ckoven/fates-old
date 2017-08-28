@@ -46,6 +46,7 @@ module EDMainMod
   use FatesPlantHydraulicsMod  , only : initTreeHydStates
   use FatesPlantHydraulicsMod  , only : updateSizeDepRhizHydProps 
 !  use FatesPlantHydraulicsMod , only : updateSizeDepRhizHydStates
+  use shr_sys_mod , only : shr_sys_flush
 
   
 
@@ -129,6 +130,7 @@ contains
        currentPatch => currentSite%oldest_patch
        do while (associated(currentPatch))
           write(fates_log(),*) 'while loop: FdBqHp'
+          call shr_sys_flush(fates_log())
           
           ! adds small cohort of each PFT
           call recruitment(0, currentSite, currentPatch, bc_in)
@@ -144,6 +146,7 @@ contains
        currentPatch => currentSite%oldest_patch
        do while (associated(currentPatch))
           write(fates_log(),*) 'while loop: JVG8ac'
+          call shr_sys_flush(fates_log())
           
           ! puts cohorts in right order
           call sort_cohorts(currentPatch)            
@@ -237,6 +240,7 @@ contains
 
     do while(associated(currentPatch))
        write(fates_log(),*) 'while loop: T5DcTy'
+       call shr_sys_flush(fates_log())
 
        currentPatch%age = currentPatch%age + hlm_freq_day
        ! FIX(SPM,032414) valgrind 'Conditional jump or move depends on uninitialised value'
@@ -255,6 +259,7 @@ contains
        currentCohort => currentPatch%shortest
        do while(associated(currentCohort))
           write(fates_log(),*) 'while loop: rfpXMz'
+          call shr_sys_flush(fates_log())
 
           cohort_biomass_store  = (currentCohort%balive+currentCohort%bdead+currentCohort%bstore)
           currentCohort%dbh    = max(small_no,currentCohort%dbh    + currentCohort%ddbhdt    * hlm_freq_day )
@@ -349,6 +354,7 @@ contains
        currentCohort => currentPatch%shortest
        do while(associated(currentCohort))
           write(fates_log(),*) 'while loop: If5Njf'
+          call shr_sys_flush(fates_log())
          currentCohort%n = max(small_no,currentCohort%n + currentCohort%dndt * hlm_freq_day )  
          currentCohort => currentCohort%taller
        enddo
@@ -407,6 +413,7 @@ contains
     currentPatch => currentSite%oldest_patch
     do while(associated(currentPatch))
        write(fates_log(),*) 'while loop: vUzKI1'
+       call shr_sys_flush(fates_log())
 
        ! Is termination really needed here? canopy_structure just called it several times! (rgk)
        call terminate_cohorts(currentSite, currentPatch, 1) 
@@ -485,6 +492,7 @@ contains
     currentPatch => currentSite%oldest_patch 
     do while(associated(currentPatch))
        write(fates_log(),*) 'while loop: DQPJL4'
+       call shr_sys_flush(fates_log())
 
        litter_stock = litter_stock + currentPatch%area * (sum(currentPatch%cwd_ag)+ &
              sum(currentPatch%cwd_bg)+sum(currentPatch%leaf_litter)+sum(currentPatch%root_litter))
@@ -492,6 +500,7 @@ contains
        
        do while(associated(currentCohort))
           write(fates_log(),*) 'while loop: HSWUGd'
+          call shr_sys_flush(fates_log())
           
           biomass_stock =  biomass_stock + (currentCohort%bdead + currentCohort%balive + &
                 currentCohort%bstore) * currentCohort%n
@@ -546,9 +555,11 @@ contains
     currentPatch => currentSite%youngest_patch
     do while(associated(currentPatch))
        write(fates_log(),*) 'while loop: FDhLO2'
+       call shr_sys_flush(fates_log())
        currentCohort => currentPatch%shortest
        do while(associated(currentCohort))
           write(fates_log(),*) 'while loop: xUs6zR'
+          call shr_sys_flush(fates_log())
 
           currentCohort%isnew=.false.
 

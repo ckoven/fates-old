@@ -27,6 +27,7 @@ module FatesHistoryInterfaceMod
   use FatesConstantsMod        , only : sec_per_day
   use FatesConstantsMod        , only : days_per_year
   use FatesConstantsMod        , only : years_per_day
+  use shr_sys_mod , only : shr_sys_flush
 
   implicit none
 
@@ -1309,6 +1310,7 @@ contains
          cpatch => sites(s)%oldest_patch
          do while(associated(cpatch))
             write(fates_log(),*) 'while loop: GrddU3'
+            call shr_sys_flush(fates_log())
             
             io_pa = io_pa1 + ipa
 
@@ -1333,6 +1335,7 @@ contains
             ccohort => cpatch%shortest
             do while(associated(ccohort))
                write(fates_log(),*) 'while loop: JaNEq3'
+               call shr_sys_flush(fates_log())
                
                ft = ccohort%pft
                
@@ -1925,6 +1928,7 @@ contains
 
          do while(associated(cpatch))
             write(fates_log(),*) 'while loop: RZ9eR4'
+            call shr_sys_flush(fates_log())
             
             io_pa = io_pa1 + ipa
 
@@ -1933,6 +1937,7 @@ contains
             ccohort => cpatch%shortest
             do while(associated(ccohort))
                write(fates_log(),*) 'while loop: sHAY82'
+               call shr_sys_flush(fates_log())
                
                ! TODO: we need a standardized logical function on this (used lots, RGK)
                if ((cpatch%area .gt. 0._r8) .and. (cpatch%total_canopy_area .gt. 0._r8)) then
@@ -2255,9 +2260,11 @@ contains
          cpatch => sites(s)%oldest_patch
          do while(associated(cpatch))
             write(fates_log(),*) 'while loop: 7c6oMx'
+            call shr_sys_flush(fates_log())
             ccohort => cpatch%shortest
             do while(associated(ccohort))
                write(fates_log(),*) 'while loop: DeSBDc'
+               call shr_sys_flush(fates_log())
                if ( .not. ccohort%isnew ) then
                   ! Calculate index for the scpf class
                   iscpf = ccohort%size_by_pft_class
@@ -2273,12 +2280,14 @@ contains
          cpatch => sites(s)%oldest_patch
          do while(associated(cpatch))
             write(fates_log(),*) 'while loop: V98HW3'
+            call shr_sys_flush(fates_log())
             
             io_pa = io_pa1 + ipa
 
             ccohort => cpatch%shortest
             do while(associated(ccohort))
                write(fates_log(),*) 'while loop: cK7KAS'
+               call shr_sys_flush(fates_log())
 
                ccohort_hydr => ccohort%co_hydr
                

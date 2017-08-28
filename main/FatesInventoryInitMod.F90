@@ -21,6 +21,7 @@ module FatesInventoryInitMod
    ! CIME GLOBALS
 
    use shr_log_mod      , only : errMsg => shr_log_errMsg
+   use shr_sys_mod , only : shr_sys_flush
 
    ! FATES GLOBALS
    use FatesConstantsMod, only : r8 => fates_r8
@@ -296,6 +297,7 @@ contains
                   currentpatch => sites(s)%youngest_patch
                   do while(associated(currentpatch))
                      write(fates_log(),*) 'while loop: XMI5IU'
+                     call shr_sys_flush(fates_log())
                      olderpatch => currentpatch%older
                      if(associated(currentpatch%older)) then
                         if(newpatch%age >= currentpatch%age .and. &
@@ -328,6 +330,7 @@ contains
             currentpatch => sites(s)%youngest_patch
             do while(associated(currentpatch))
                write(fates_log(),*) 'while loop: fJZNa4'
+               call shr_sys_flush(fates_log())
                write(fates_log(),*) ' AGE: ',currentpatch%age,' AREA: ',currentpatch%area
                currentPatch => currentpatch%older
             enddo
@@ -371,9 +374,11 @@ contains
          currentpatch => sites(s)%youngest_patch
          do while(associated(currentpatch))
             write(fates_log(),*) 'while loop: eXZJQg'
+            call shr_sys_flush(fates_log())
             currentcohort => currentpatch%tallest
             do while(associated(currentcohort))
                write(fates_log(),*) 'while loop: OytHI1'
+               call shr_sys_flush(fates_log())
                basal_area_pref = basal_area_pref + &
                      currentcohort%n*0.25*((currentcohort%dbh/100.0_r8)**2.0_r8)*pi_const
                currentcohort => currentcohort%shorter
@@ -394,6 +399,7 @@ contains
          currentpatch => sites(s)%youngest_patch
          do while(associated(currentpatch))
             write(fates_log(),*) 'while loop: IO8j4B'
+            call shr_sys_flush(fates_log())
             currentpatch%patchno = ipa
             ipa=ipa+1
             
@@ -421,9 +427,11 @@ contains
          currentpatch => sites(s)%youngest_patch
          do while(associated(currentpatch))
             write(fates_log(),*) 'while loop: aSDqpX'
+            call shr_sys_flush(fates_log())
             currentcohort => currentpatch%tallest
             do while(associated(currentcohort))
                write(fates_log(),*) 'while loop: DijMye'
+               call shr_sys_flush(fates_log())
                basal_area_postf = basal_area_postf + &
                      currentcohort%n*0.25*((currentcohort%dbh/100.0_r8)**2.0_r8)*pi_const
                currentcohort => currentcohort%shorter

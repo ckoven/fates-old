@@ -27,6 +27,7 @@
   use EDtypesMod            , only : NCWD
   use EDtypesMod            , only : NFSC
   use EDtypesMod            , only : TR_SF
+  use shr_sys_mod , only : shr_sys_flush
 
   implicit none
   private
@@ -69,6 +70,7 @@ contains
     currentPatch => currentSite%youngest_patch
     do while(associated(currentPatch))
        write(fates_log(),*) 'while loop: VIdd5U'
+       call shr_sys_flush(fates_log())
        currentPatch%frac_burnt = 0.0_r8
        currentPatch%AB         = 0.0_r8
        currentPatch%fire       = 0
@@ -164,11 +166,13 @@ contains
     currentPatch => currentSite%oldest_patch; 
     do while(associated(currentPatch))
        write(fates_log(),*) 'while loop: y4SEDf'
+       call shr_sys_flush(fates_log())
        ! How much live grass is there? 
        currentPatch%livegrass = 0.0_r8 
        currentCohort => currentPatch%tallest
        do while(associated(currentCohort))
           write(fates_log(),*) 'while loop: bmyN21'
+          call shr_sys_flush(fates_log())
           if(EDPftvarcon_inst%woody(currentCohort%pft) == 0)then 
              currentPatch%livegrass = currentPatch%livegrass + currentCohort%bl*currentCohort%n/currentPatch%area
           endif
@@ -342,12 +346,14 @@ contains
     currentPatch=>currentSite%oldest_patch;  
     do while(associated(currentPatch))
        write(fates_log(),*) 'while loop: 2fWPV6'
+       call shr_sys_flush(fates_log())
        currentPatch%total_tree_area = 0.0_r8
        total_grass_area = 0.0_r8
        currentCohort => currentPatch%tallest
  
        do while(associated(currentCohort))
           write(fates_log(),*) 'while loop: Pnkk2J'
+          call shr_sys_flush(fates_log())
           if (DEBUG) write(fates_log(),*) 'SF currentCohort%c_area ',currentCohort%c_area
           if(EDPftvarcon_inst%woody(currentCohort%pft) == 1)then
              currentPatch%total_tree_area = currentPatch%total_tree_area + currentCohort%c_area
@@ -381,6 +387,7 @@ contains
 
     do while(associated(currentPatch))
        write(fates_log(),*) 'while loop: 78HTe8'
+       call shr_sys_flush(fates_log())
        currentPatch%total_tree_area = min(currentPatch%total_tree_area,currentPatch%area)
        ! effect_wspeed in units m/min      
        currentPatch%effect_wspeed = currentSite%wind * (tree_fraction*0.4+(grass_fraction+bare_fraction)*0.6)
@@ -425,6 +432,7 @@ contains
 
     do while(associated(currentPatch))
        write(fates_log(),*) 'while loop: jGmg5c'
+       call shr_sys_flush(fates_log())
               
         ! ---initialise parameters to zero.--- 
        beta_ratio = 0.0_r8; q_ig = 0.0_r8; eps = 0.0_r8;   a = 0.0_r8;   b = 0.0_r8;   c = 0.0_r8;   e = 0.0_r8
@@ -580,6 +588,7 @@ contains
 
     do while(associated(currentPatch))
        write(fates_log(),*) 'while loop: EFrVDW'
+       call shr_sys_flush(fates_log())
        currentPatch%burnt_frac_litter = 1.0_r8       
        ! Calculate fraction of litter is burnt for all classes. 
        ! Equation B1 in Thonicke et al. 2010---
@@ -666,6 +675,7 @@ contains
 
     do while(associated(currentPatch))
        write(fates_log(),*) 'while loop: 1yho0U'
+       call shr_sys_flush(fates_log())
        ROS   = currentPatch%ROS_front / 60.0_r8 !m/min to m/sec 
        W     = currentPatch%TFC_ROS / 0.45_r8 !kgC/m2 to kgbiomass/m2
        currentPatch%FI = SF_val_fuel_energy * W * ROS !kj/m/s, or kW/m
@@ -731,6 +741,7 @@ contains
     currentPatch => currentSite%oldest_patch;  
     do while(associated(currentPatch))
        write(fates_log(),*) 'while loop: kxsftQ'
+       call shr_sys_flush(fates_log())
        currentPatch%AB = 0.0_r8
        currentPatch%frac_burnt = 0.0_r8
        lb = 0.0_r8; db = 0.0_r8; df = 0.0_r8
@@ -825,6 +836,7 @@ contains
     currentPatch => currentSite%oldest_patch;  
     do while(associated(currentPatch))
        write(fates_log(),*) 'while loop: t8BMQS'
+       call shr_sys_flush(fates_log())
 
        tree_ag_biomass = 0.0_r8
        f_ag_bmass = 0.0_r8
@@ -832,6 +844,7 @@ contains
           currentCohort => currentPatch%tallest;
           do while(associated(currentCohort))
              write(fates_log(),*) 'while loop: fUZtgO'
+             call shr_sys_flush(fates_log())
              if (EDPftvarcon_inst%woody(currentCohort%pft) == 1) then !trees only
                 tree_ag_biomass = tree_ag_biomass+(currentCohort%bl+EDPftvarcon_inst%allom_agb_frac(currentCohort%pft)* &
                      (currentCohort%bsw + currentCohort%bdead))*currentCohort%n
@@ -848,6 +861,7 @@ contains
           currentCohort => currentPatch%tallest;
           do while(associated(currentCohort))
              write(fates_log(),*) 'while loop: p3BkLe'
+             call shr_sys_flush(fates_log())
              if (EDPftvarcon_inst%woody(currentCohort%pft) == 1 &
                   .and. (tree_ag_biomass > 0.0_r8)) then !trees only
                 f_ag_bmass = ((currentCohort%bl+EDPftvarcon_inst%allom_agb_frac(currentCohort%pft)*(currentCohort%bsw + &
@@ -886,12 +900,14 @@ contains
 
     do while(associated(currentPatch))
        write(fates_log(),*) 'while loop: 93P5Ky'
+       call shr_sys_flush(fates_log())
        if (currentPatch%fire == 1) then
 
           currentCohort=>currentPatch%tallest
 
           do while(associated(currentCohort))
              write(fates_log(),*) 'while loop: R4naJB'
+             call shr_sys_flush(fates_log())
              currentCohort%cfa = 0.0_r8
              if (EDPftvarcon_inst%woody(currentCohort%pft) == 1) then !trees only
                 ! Flames lower than bottom of canopy. 
@@ -951,11 +967,13 @@ contains
 
     do while(associated(currentPatch))
        write(fates_log(),*) 'while loop: 7CL8aT'
+       call shr_sys_flush(fates_log())
 
        if (currentPatch%fire == 1) then
           currentCohort => currentPatch%tallest;
           do while(associated(currentCohort))
              write(fates_log(),*) 'while loop: aUBLxh'
+             call shr_sys_flush(fates_log())
              if (EDPftvarcon_inst%woody(currentCohort%pft) == 1) then !trees only
                 ! Equation 21 in Thonicke et al 2010
                 bt = EDPftvarcon_inst%bark_scaler(currentCohort%pft)*currentCohort%dbh ! bark thickness. 
@@ -1003,11 +1021,13 @@ contains
 
     do while(associated(currentPatch))
        write(fates_log(),*) 'while loop: rtGFVr'
+       call shr_sys_flush(fates_log())
 
        if (currentPatch%fire == 1) then 
           currentCohort => currentPatch%tallest
           do while(associated(currentCohort))
              write(fates_log(),*) 'while loop: UdG0ye'
+             call shr_sys_flush(fates_log())
              currentCohort%fire_mort = 0.0_r8
              currentCohort%crownfire_mort = 0.0_r8
              if (EDPftvarcon_inst%woody(currentCohort%pft) == 1) then

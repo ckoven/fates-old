@@ -32,6 +32,7 @@ module EDCohortDynamicsMod
 
   ! CIME globals
   use shr_log_mod           , only : errMsg => shr_log_errMsg
+  use shr_sys_mod , only : shr_sys_flush
   !
   implicit none
   private
@@ -535,6 +536,7 @@ contains
 
     do while (associated(currentCohort))
        write(fates_log(),*) 'while loop: hOzZRg'
+       call shr_sys_flush(fates_log())
        nextc      => currentCohort%shorter    
        terminate = 0 
 
@@ -721,6 +723,7 @@ contains
 
               do while (associated(nextc))
                  write(fates_log(),*) 'while loop: 5Ic2P1'
+                 call shr_sys_flush(fates_log())
                  nextnextc => nextc%shorter                      
                  diff = abs((currentCohort%dbh - nextc%dbh)/(0.5*(currentCohort%dbh + nextc%dbh)))  
 
@@ -984,6 +987,7 @@ contains
 
     do while (associated(current_c))
        write(fates_log(),*) 'while loop: VahIaW'
+       call shr_sys_flush(fates_log())
        next_c => current_c%shorter
        tallestc  => storebigcohort 
        shortestc => storesmallcohort   
@@ -1060,6 +1064,7 @@ contains
     if (associated(current)) then
        do while (associated(current).and.exitloop == 0)
           write(fates_log(),*) 'while loop: vGyNeZ'
+          call shr_sys_flush(fates_log())
           if (current%dbh < tsp) then
              current => current%taller   
           else
@@ -1283,6 +1288,7 @@ contains
     currentPatch%countcohorts = 0
     do while (associated(currentCohort))
        write(fates_log(),*) 'while loop: MmNajs'
+       call shr_sys_flush(fates_log())
        currentPatch%countcohorts = currentPatch%countcohorts + 1 
        currentCohort => currentCohort%taller  
     enddo
@@ -1291,6 +1297,7 @@ contains
     currentCohort => currentPatch%tallest
     do while (associated(currentCohort))
        write(fates_log(),*) 'while loop: PtEpFJ'
+       call shr_sys_flush(fates_log())
        backcount = backcount + 1
        currentCohort => currentCohort%shorter    
     enddo
