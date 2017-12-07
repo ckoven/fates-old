@@ -1676,7 +1676,7 @@ contains
 
       ! Parameters
       ! ---------------------------------------------------------------------------------
-      real(r8), parameter :: maintresp_reduction_parameter = 1.0_r8  ! parameter value for curvature of respiration reduction term.  
+      real(r8), parameter :: maintresp_reduction_parameter = 0.01_r8  ! parameter value for curvature of respiration reduction term.  
       
        if( b_leaf > 0._r8 .and. bstore <= b_leaf )then
           frac = bstore/ b_leaf
