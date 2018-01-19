@@ -1434,7 +1434,7 @@ contains
 
        if(nopatches > maxpatch)then
           iterate = 1
-          profiletol = profiletol * 1.1_r8
+          profiletol = profiletol * 1.02_r8
 
           !---------------------------------------------------------------------!
           ! Making profile tolerance larger means that more fusion will happen  !
