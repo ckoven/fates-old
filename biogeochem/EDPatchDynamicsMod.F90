@@ -7,7 +7,7 @@ module EDPatchDynamicsMod
   use FatesInterfaceMod    , only : hlm_freq_day
   use EDPftvarcon          , only : EDPftvarcon_inst
   use EDCohortDynamicsMod  , only : fuse_cohorts, sort_cohorts, insert_cohort
-  use EDtypesMod           , only : ncwd, n_dbh_bins, ntol, area, patchfusion_dbhbin_loweredges
+  use EDtypesMod           , only : ncwd, n_dbh_bins, area, patchfusion_dbhbin_loweredges
   use EDTypesMod           , only : maxPatchesPerSite
   use EDTypesMod           , only : ed_site_type, ed_patch_type, ed_cohort_type
   use EDTypesMod           , only : min_patch_area
