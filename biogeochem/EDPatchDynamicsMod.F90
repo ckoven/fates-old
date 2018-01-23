@@ -1400,9 +1400,9 @@ contains
 
                                if(norm  > profiletol)then
                                   !looking for differences between profile density.                   
-                                  if(currentPatch%pft_agb_profile(ft,z) > NTOL.or.tpp%pft_agb_profile(ft,z) > NTOL)then
+                                  !if(currentPatch%pft_agb_profile(ft,z) > NTOL.or.tpp%pft_agb_profile(ft,z) > NTOL)then
                                      fuse_flag = 0 !do not fuse  - keep apart. 
-                                  endif
+                                  !endif
                                endif ! profile tol           
                             endif ! NTOL 
                          enddo !ht bins

@@ -87,7 +87,7 @@ module EDTypesMod
        (/0._r8, 5._r8, 20._r8, 50._r8, 100._r8, 150._r8/)  ! array of bin lower edges for comparing patches
 
   ! COHORT FUSION
-  real(r8), parameter :: NTOL                 = 0.05_r8    ! min plant density for hgt bin to be used in height profile comparisons 
+  !real(r8), parameter :: NTOL                 = 0.05_r8    ! min plant density for hgt bin to be used in height profile comparisons 
   real(r8), parameter :: HITEMAX              = 30.0_r8    ! max dbh value used in hgt profile comparison 
   integer , parameter :: N_HITE_BINS          = 60         ! no. of hite bins used to distribute LAI
 
