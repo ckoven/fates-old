@@ -64,7 +64,7 @@ module EDTypesMod
   ! BIOLOGY/BIOGEOCHEMISTRY        
   integer , parameter :: external_recruitment = 0          ! external recruitment flag 1=yes  
   integer , parameter :: SENES                = 10         ! Window of time over which we track temp for cold sensecence (days)
-  real(r8), parameter :: DINC_ED              = 1.0_r8     ! size of LAI bins. 
+  real(r8), parameter :: DINC_ED              = 0.25_r8     ! size of LAI bins. 
   integer , parameter :: N_DIST_TYPES         = 3          ! Disturbance Modes 1) tree-fall, 2) fire, 3) logging
   integer , parameter :: dtype_ifall          = 1          ! index for naturally occuring tree-fall generated event
   integer , parameter :: dtype_ifire          = 2          ! index for fire generated disturbance event
