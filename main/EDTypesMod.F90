@@ -22,11 +22,25 @@ module EDTypesMod
                                                   ! the parameter file may determine that fewer
                                                   ! are used, but this helps allocate scratch
                                                   ! space and output arrays.
+
+
+  ! -------------------------------------------------------------------------------------
+  ! Radiation parameters
+  ! These should be part of the radiation module, but since we only have one option
+  ! this is ok for now. (RGK 04-2018)
+  ! -------------------------------------------------------------------------------------
+
+
+  integer, parameter :: n_rad_stream_types = 2    ! The number of radiation streams used (direct/diffuse)
  
+  integer, parameter :: idirect   = 1           ! This is the array index for direct radiation
+  integer, parameter :: idiffuse  = 2           ! This is the array index for diffuse radiation
+
 
   ! TODO: we use this cp_maxSWb only because we have a static array q(size=2) of
   ! land-ice abledo for vis and nir.  This should be a parameter, which would
   ! get us on track to start using multi-spectral or hyper-spectral (RGK 02-2017)
+
   integer, parameter :: maxSWb = 2      ! maximum number of broad-bands in the
                                         ! shortwave spectrum cp_numSWb <= cp_maxSWb
                                         ! this is just for scratch-array purposes
@@ -43,6 +57,10 @@ module EDTypesMod
                                         ! in boundary condition files and parameter
                                         ! files.  This will be compared with 
                                         ! the HLM's expectation in FatesInterfaceMod
+
+  integer, parameter :: ipar = ivis     ! The photosynthetically active band
+                                        ! can be approximated to be equal to the visible band
+
 
   ! Switches that turn on/off ED dynamics process (names are self explanatory)
   ! IMPORTANT NOTE!!! THESE SWITCHES ARE EXPERIMENTAL.  
@@ -296,22 +314,31 @@ module EDTypesMod
 
      ! LEAF ORGANIZATION
      real(r8) ::  pft_agb_profile(maxpft,n_dbh_bins)            ! binned above ground biomass, for patch fusion: KgC/m2
-     real(r8) ::  canopy_layer_lai(nclmax)                         ! lai that is shading this canopy layer: m2/m2 
+     real(r8) ::  canopy_layer_tai(nclmax)                      ! total area index of each canopy layer
+                                                                ! used to determine attenuation of parameters during
+                                                                ! photosynthesis m2 veg / m2 of canopy area (patch without bare ground)
      real(r8) ::  total_canopy_area                                ! area that is covered by vegetation : m2
      real(r8) ::  total_tree_area                                  ! area that is covered by woody vegetation : m2
-     real(r8) ::  canopy_area                                      ! area that is covered by vegetation : m2 (is this different to total_canopy_area?
      real(r8) ::  bare_frac_area                                   ! bare soil in this patch expressed as a fraction of the total soil surface.
-     real(r8) ::  lai                                              ! leaf area index of patch
      real(r8) ::  zstar                                            ! height of smallest canopy tree -- only meaningful in "strict PPA" mode
 
-     real(r8) ::  tlai_profile(nclmax,maxpft,nlevleaf)        ! total   leaf area in each canopy layer, pft, and leaf layer. m2/m2
-     real(r8) ::  elai_profile(nclmax,maxpft,nlevleaf)        ! exposed leaf area in each canopy layer, pft, and leaf layer. m2/m2
-     real(r8) ::  tsai_profile(nclmax,maxpft,nlevleaf)        ! total   stem area in each canopy layer, pft, and leaf layer. m2/m2
-     real(r8) ::  esai_profile(nclmax,maxpft,nlevleaf)        ! exposed stem area in each canopy layer, pft, and leaf layer. m2/m2
+
+                                                              ! UNITS for the ai profiles
+                                                              ! [ m2 leaf / m2 contributing crown footprints]
+     real(r8) ::  tlai_profile(nclmax,maxpft,nlevleaf)        ! total   leaf area in each canopy layer, pft, and leaf layer. 
+     real(r8) ::  elai_profile(nclmax,maxpft,nlevleaf)        ! exposed leaf area in each canopy layer, pft, and leaf layer
+     real(r8) ::  tsai_profile(nclmax,maxpft,nlevleaf)        ! total   stem area in each canopy layer, pft, and leaf layer
+     real(r8) ::  esai_profile(nclmax,maxpft,nlevleaf)        ! exposed stem area in each canopy layer, pft, and leaf layer
+
      real(r8) ::  layer_height_profile(nclmax,maxpft,nlevleaf)
-     real(r8) ::  canopy_area_profile(nclmax,maxpft,nlevleaf) ! fraction of canopy in each canopy 
+     real(r8) ::  canopy_area_profile(nclmax,maxpft,nlevleaf) ! fraction of crown area per canopy area in each layer
+                                                              ! they will sum to 1.0 in the fully closed canopy layers
+                                                              ! but only in leaf-layers that contain contributions
+                                                              ! from all cohorts that donate to canopy_area
+
+
      ! layer, pft, and leaf layer:-
-     integer  ::  present(nclmax,maxpft)                        ! is there any of this pft in this canopy layer?      
+     integer  ::  canopy_mask(nclmax,maxpft)                    ! is there any of this pft in this canopy layer?      
      integer  ::  nrad(nclmax,maxpft)                           ! number of exposed leaf layers for each canopy layer and pft
      integer  ::  ncan(nclmax,maxpft)                           ! number of total   leaf layers for each canopy layer and pft
 
@@ -333,14 +360,23 @@ module EDTypesMod
      real(r8) ::  f_sun(nclmax,maxpft,nlevleaf)               ! fraction of leaves in the sun in each canopy layer, pft, 
 
      ! radiation profiles for comparison against observations
-     real(r8) ::  nrmlzd_parprof_pft_dir_z(2,nclmax,maxpft,nlevleaf)  ! normalized direct photosynthetically active radiation profiles by 
-                                                                      ! incident type (direct/diffuse at top of canopy),leaf,pft,leaf (unitless)
-     real(r8) ::  nrmlzd_parprof_pft_dif_z(2,nclmax,maxpft,nlevleaf)  ! normalized diffuse photosynthetically active radiation profiles by 
-                                                                      ! incident type (direct/diffuse at top of canopy),leaf,pft,leaf (unitless)
-     real(r8) ::  nrmlzd_parprof_dir_z(2,nclmax,nlevleaf)     ! normalized direct photosynthetically active radiation profiles by 
-                                                              ! incident type (direct/diffuse at top of canopy),leaf,leaf (unitless)     
-     real(r8) ::  nrmlzd_parprof_dif_z(2,nclmax,nlevleaf)     ! normalized diffuse photosynthetically active radiation profiles by 
-                                                              ! incident type (direct/diffuse at top of canopy),leaf,leaf (unitless)     
+
+     ! normalized direct photosynthetically active radiation profiles by 
+     ! incident type (direct/diffuse at top of canopy),leaf,pft,leaf (unitless)
+     real(r8) ::  nrmlzd_parprof_pft_dir_z(n_rad_stream_types,nclmax,maxpft,nlevleaf)  
+
+     ! normalized diffuse photosynthetically active radiation profiles by 
+     ! incident type (direct/diffuse at top of canopy),leaf,pft,leaf (unitless)
+     real(r8) ::  nrmlzd_parprof_pft_dif_z(n_rad_stream_types,nclmax,maxpft,nlevleaf)  
+
+     ! normalized direct photosynthetically active radiation profiles by 
+     ! incident type (direct/diffuse at top of canopy),leaf,leaf (unitless) 
+     real(r8) ::  nrmlzd_parprof_dir_z(n_rad_stream_types,nclmax,nlevleaf)         
+
+     ! normalized diffuse photosynthetically active radiation profiles by 
+     ! incident type (direct/diffuse at top of canopy),leaf,leaf (unitless) 
+     real(r8) ::  nrmlzd_parprof_dif_z(n_rad_stream_types,nclmax,nlevleaf)
+         
      real(r8) ::  parprof_pft_dir_z(nclmax,maxpft,nlevleaf)   ! direct-beam PAR profile through canopy, by canopy,PFT,leaf level (w/m2)
      real(r8) ::  parprof_pft_dif_z(nclmax,maxpft,nlevleaf)   ! diffuse     PAR profile through canopy, by canopy,PFT,leaf level (w/m2)
      real(r8) ::  parprof_dir_z(nclmax,nlevleaf)              ! direct-beam PAR profile through canopy, by canopy,leaf level (w/m2)
@@ -696,9 +732,7 @@ contains
      write(fates_log(),*) 'pa%ncl_p              = ',cpatch%ncl_p
      write(fates_log(),*) 'pa%total_canopy_area  = ',cpatch%total_canopy_area
      write(fates_log(),*) 'pa%total_tree_area    = ',cpatch%total_tree_area
-     write(fates_log(),*) 'pa%canopy_area        = ',cpatch%canopy_area
      write(fates_log(),*) 'pa%bare_frac_area     = ',cpatch%bare_frac_area
-     write(fates_log(),*) 'pa%lai                = ',cpatch%lai
      write(fates_log(),*) 'pa%zstar              = ',cpatch%zstar
      write(fates_log(),*) 'pa%disturbance_rate   = ',cpatch%disturbance_rate
      write(fates_log(),*) '----------------------------------------'

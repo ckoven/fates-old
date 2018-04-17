@@ -86,6 +86,9 @@ module FatesAllometryMod
   use EDPFTvarcon      , only : EDPftvarcon_inst
   use FatesConstantsMod, only : r8 => fates_r8
   use FatesConstantsMod, only : i4 => fates_int
+  use FatesConstantsMod, only : g_per_kg 
+  use FatesConstantsMod, only : cm2_per_m2
+  use FatesConstantsMod, only : kg_per_Megag
   use shr_log_mod      , only : errMsg => shr_log_errMsg
   use FatesGlobals     , only : fates_log
   use FatesGlobals     , only : endrun => fates_endrun
@@ -518,7 +521,7 @@ contains
        write(fates_log(),*) 'problem in treelai',bl,pft
     endif
 
-    slat = 1000.0_r8 * EDPftvarcon_inst%slatop(pft) ! m2/g to m2/kg
+    slat = g_per_kg * EDPftvarcon_inst%slatop(pft) ! m2/g to m2/kg
     leafc_per_unitarea = bl/(c_area/n) !KgC/m2
     if(leafc_per_unitarea > 0.0_r8)then
        tree_lai = leafc_per_unitarea * slat  !kg/m2 * m2/kg = unitless LAI 
@@ -558,7 +561,7 @@ contains
     real(r8) :: sai_scaler     
     real(r8) :: b_leaf
 
-    sai_scaler = 1000. * EDPftvarcon_inst%allom_sai_scaler(pft)  ! m2/g to m2/kg
+    sai_scaler = g_per_kg * EDPftvarcon_inst%allom_sai_scaler(pft)  ! m2/g to m2/kg
 
     call bleaf(dbh,pft,canopy_trim,b_leaf)
 
@@ -888,9 +891,7 @@ contains
   
  subroutine bsap_deprecated(d,h,dhdd,bleaf,dbleafdd,ipft,bsap,dbsapdd)
     
-    use FatesConstantsMod, only : g_per_kg
-    use FatesConstantsMod, only : cm2_per_m2
-    use FatesConstantsMod, only : kg_per_Megag
+
     
     ! -------------------------------------------------------------------------
     ! -------------------------------------------------------------------------
@@ -936,10 +937,6 @@ contains
   ! ========================================================================
 
   subroutine bsap_dlinear(d,h,dhdd,bleaf,dbleafdd,ipft,bsap,dbsapdd)
-    
-    use FatesConstantsMod, only : g_per_kg
-    use FatesConstantsMod, only : cm2_per_m2
-    use FatesConstantsMod, only : kg_per_Megag
     
     ! -------------------------------------------------------------------------
     ! Calculate sapwood biomass based on leaf area to sapwood area
@@ -1768,7 +1765,6 @@ contains
      ! the predicted structure based on the searched diameter is within a tolerance.
      ! T
      ! ============================================================================
-
 
      use FatesConstantsMod     , only : calloc_abs_error
      ! Arguments
