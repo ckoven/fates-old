@@ -1508,41 +1508,38 @@ end subroutine flush_hvars
                        write(fates_log(),*) ' NPP components during FATES-HLM linking does not balance '
                        call endrun(msg=errMsg(__FILE__, __LINE__))
                     end if
+                    
+                    
+                    hio_m1_si_scpf(io_si,scpf) = hio_m1_si_scpf(io_si,scpf) + ccohort%bmort*ccohort%n
+                    hio_m2_si_scpf(io_si,scpf) = hio_m2_si_scpf(io_si,scpf) + ccohort%hmort*ccohort%n
+                    hio_m3_si_scpf(io_si,scpf) = hio_m3_si_scpf(io_si,scpf) + ccohort%cmort*ccohort%n
+                    hio_m5_si_scpf(io_si,scpf) = hio_m5_si_scpf(io_si,scpf) + ccohort%fmort*ccohort%n
+                    hio_m7_si_scpf(io_si,scpf) = hio_m7_si_scpf(io_si,scpf) + &
+                         (ccohort%lmort_direct+ccohort%lmort_collateral+ccohort%lmort_infra) * ccohort%n
+                    hio_m8_si_scpf(io_si,scpf) = hio_m8_si_scpf(io_si,scpf) + ccohort%frmort*ccohort%n
 
-                    ! Woody State Variables (basal area and number density and mortality)
-                    if (EDPftvarcon_inst%woody(ft) == 1) then
-                       
-                       hio_m1_si_scpf(io_si,scpf) = hio_m1_si_scpf(io_si,scpf) + ccohort%bmort*ccohort%n
-                       hio_m2_si_scpf(io_si,scpf) = hio_m2_si_scpf(io_si,scpf) + ccohort%hmort*ccohort%n
-                       hio_m3_si_scpf(io_si,scpf) = hio_m3_si_scpf(io_si,scpf) + ccohort%cmort*ccohort%n
-                       hio_m5_si_scpf(io_si,scpf) = hio_m5_si_scpf(io_si,scpf) + ccohort%fmort*ccohort%n
-                       hio_m7_si_scpf(io_si,scpf) = hio_m7_si_scpf(io_si,scpf) + &
-                            (ccohort%lmort_direct+ccohort%lmort_collateral+ccohort%lmort_infra) * ccohort%n
-                       hio_m8_si_scpf(io_si,scpf) = hio_m8_si_scpf(io_si,scpf) + ccohort%frmort*ccohort%n
+                    hio_m1_si_scls(io_si,scls) = hio_m1_si_scls(io_si,scls) + ccohort%bmort*ccohort%n
+                    hio_m2_si_scls(io_si,scls) = hio_m2_si_scls(io_si,scls) + ccohort%hmort*ccohort%n
+                    hio_m3_si_scls(io_si,scls) = hio_m3_si_scls(io_si,scls) + ccohort%cmort*ccohort%n
+                    hio_m5_si_scls(io_si,scls) = hio_m5_si_scls(io_si,scls) + ccohort%fmort*ccohort%n
+                    hio_m7_si_scls(io_si,scls) = hio_m7_si_scls(io_si,scls) + &
+                         (ccohort%lmort_direct+ccohort%lmort_collateral+ccohort%lmort_infra) * ccohort%n
+                    hio_m8_si_scls(io_si,scls) = hio_m8_si_scls(io_si,scls) + &
+                         ccohort%frmort*ccohort%n
 
-                       hio_m1_si_scls(io_si,scls) = hio_m1_si_scls(io_si,scls) + ccohort%bmort*ccohort%n
-                       hio_m2_si_scls(io_si,scls) = hio_m2_si_scls(io_si,scls) + ccohort%hmort*ccohort%n
-                       hio_m3_si_scls(io_si,scls) = hio_m3_si_scls(io_si,scls) + ccohort%cmort*ccohort%n
-                       hio_m5_si_scls(io_si,scls) = hio_m5_si_scls(io_si,scls) + ccohort%fmort*ccohort%n
-		       hio_m7_si_scls(io_si,scls) = hio_m7_si_scls(io_si,scls) + &
-                             (ccohort%lmort_direct+ccohort%lmort_collateral+ccohort%lmort_infra) * ccohort%n
-                       hio_m8_si_scls(io_si,scls) = hio_m8_si_scls(io_si,scls) + &
-                             ccohort%frmort*ccohort%n
+                    ! basal area  [m2/ha]
+                    hio_ba_si_scpf(io_si,scpf) = hio_ba_si_scpf(io_si,scpf) + &
+                         0.25_r8*3.14159_r8*((dbh/100.0_r8)**2.0_r8)*ccohort%n
+                    ! also by size class only
+                    hio_ba_si_scls(io_si,scls) = hio_ba_si_scls(io_si,scls) + &
+                         0.25_r8*3.14159_r8*((dbh/100.0_r8)**2.0_r8)*ccohort%n
 
-                       ! basal area  [m2/ha]
-                       hio_ba_si_scpf(io_si,scpf) = hio_ba_si_scpf(io_si,scpf) + &
-                            0.25_r8*3.14159_r8*((dbh/100.0_r8)**2.0_r8)*ccohort%n
-                       ! also by size class only
-                       hio_ba_si_scls(io_si,scls) = hio_ba_si_scls(io_si,scls) + &
-                            0.25_r8*3.14159_r8*((dbh/100.0_r8)**2.0_r8)*ccohort%n
-                       
-                       ! number density [/ha]
-                       hio_nplant_si_scpf(io_si,scpf) = hio_nplant_si_scpf(io_si,scpf) + ccohort%n
-                       
-                       ! growth increment
-                       hio_ddbh_si_scpf(io_si,scpf) = hio_ddbh_si_scpf(io_si,scpf) + &
-                            ccohort%ddbhdt*ccohort%n
-                    end if
+                    ! number density [/ha]
+                    hio_nplant_si_scpf(io_si,scpf) = hio_nplant_si_scpf(io_si,scpf) + ccohort%n
+
+                    ! growth increment
+                    hio_ddbh_si_scpf(io_si,scpf) = hio_ddbh_si_scpf(io_si,scpf) + &
+                         ccohort%ddbhdt*ccohort%n
 
                     hio_agb_si_scls(io_si,scls) = hio_agb_si_scls(io_si,scls) + &
                          ccohort%b_total() * ccohort%n * EDPftvarcon_inst%allom_agb_frac(ccohort%pft) * AREA_INV
