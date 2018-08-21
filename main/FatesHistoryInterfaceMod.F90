@@ -103,7 +103,7 @@ module FatesHistoryInterfaceMod
   ! Indices to site by patch age by pft variables
   integer, private :: ih_biomass_si_agepft
   integer, private :: ih_npp_si_agepft
-  integer, private :: ih_lai_si_agepft
+  integer, private :: ih_leafarea_si_agepft
   integer, private :: ih_trimming_si_agepft
   integer, private :: ih_crownarea_si_agepft
 
@@ -1474,7 +1474,7 @@ end subroutine flush_hvars
                hio_nplant_si_scagpft                => this%hvars(ih_nplant_si_scagpft)%r82d, &
                hio_npp_si_agepft                    => this%hvars(ih_npp_si_agepft)%r82d, &
                hio_biomass_si_agepft                => this%hvars(ih_biomass_si_agepft)%r82d, &
-               hio_lai_si_agepft                    => this%hvars(ih_lai_si_agepft)%r82d, &
+               hio_leafarea_si_agepft               => this%hvars(ih_leafarea_si_agepft)%r82d, &
                hio_trimming_si_agepft               => this%hvars(ih_trimming_si_agepft)%r82d, &
                hio_crownarea_si_agepft              => this%hvars(ih_crownarea_si_agepft)%r82d, &
                hio_yesterdaycanopylevel_canopy_si_scls     => this%hvars(ih_yesterdaycanopylevel_canopy_si_scls)%r82d, &
@@ -1795,8 +1795,8 @@ end subroutine flush_hvars
                     hio_biomass_si_agepft(io_si,iagepft) = hio_biomass_si_agepft(io_si,iagepft) + &
                          ccohort%b_total() * ccohort%n * AREA_INV
 
-                    hio_lai_si_agepft(io_si, iagepft) = hio_lai_si_agepft(io_si, iagepft) + &
-                         ccohort%lai
+                    hio_leafarea_si_agepft(io_si, iagepft) = hio_leafarea_si_agepft(io_si, iagepft) + &
+                         ccohort%lai * cpatch%area * AREA_INV
 
                     hio_trimming_si_agepft(io_si, iagepft) = hio_trimming_si_agepft(io_si, iagepft) + &
                          ccohort%canopy_trim * ccohort%c_area
@@ -3713,10 +3713,10 @@ end subroutine flush_hvars
           avgflag='A', vtype=site_agepft_r8, hlms='CLM:ALM', flushval=0.0_r8,    &
           upfreq=1, ivar=ivar, initialize=initialize_variables, index = ih_biomass_si_agepft )
 
-    call this%set_history_var(vname='LAI_AGEPFT',units = 'm2/m2',               &
-          long='LAI per PFT in each age bin', use_default='inactive',   &
+    call this%set_history_var(vname='LEAFAREA_AGEPFT',units = 'm2 leaf / m2 site area',               &
+          long='Leaf Area per PFT in each age bin; divide by PATCH_AREA_BY_AGE to get LAI by PFT and age', use_default='inactive',   &
           avgflag='A', vtype=site_agepft_r8, hlms='CLM:ALM', flushval=0.0_r8,    &
-          upfreq=1, ivar=ivar, initialize=initialize_variables, index = ih_lai_si_agepft )
+          upfreq=1, ivar=ivar, initialize=initialize_variables, index = ih_leafarea_si_agepft )
 
     call this%set_history_var(vname='TRIMMING_AGEPFT',units = 'unitless * m2',               &
           long='trimming by PFT in each age bin (divide by CROWNAREA_AGEPFT to use)', use_default='inactive',   &
