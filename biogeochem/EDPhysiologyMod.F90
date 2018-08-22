@@ -824,13 +824,34 @@ contains
     ! !ARGUMENTS    
     type(ed_site_type), intent(inout), target  :: currentSite
     type(ed_patch_type),intent(inout) :: currentPatch ! seeds go to these patches.
+    type (ed_patch_type)  , pointer :: otherPatch
     !
     ! !LOCAL VARIABLES:
     integer :: p
-    real(r8) max_germination !cap on germination rates. KgC/m2/yr Lishcke et al. 2009
+    real(r8) recruitment_modifier(1:maxpft), allpatches_recruitment_modifier(1:maxpft)
     !----------------------------------------------------------------------
+    !
+    real(r8), parameter :: max_germination = 1.0_r8 !cap on germination rates. KgC/m2/yr Lishcke et al. 2009; !this is arbitrary
 
-    max_germination = 1.0_r8 !this is arbitrary
+    ! semi-simple recruitment model.  distribute germination events such that they are partially controlled by the openness of the canopy
+    ! calculate as an exponential function of the number of (tree) canopy layers (where 1 is fully-closed)
+    ! but also renormalize so that the total germination rate across all patches equals the germination timescale
+
+    do p = 1,numpft
+       recruitment_modifier(p) = exp(-EDPftvarcon_inst%%germination_canopy_openness_param(p) * &
+            currentPatch%total_tree_area / currentPatch%area)
+    end do
+
+    allpatches_recruitment_modifier(1:maxpft) = 0._r8
+    otherPatch => sites(s)%oldest_patch
+    do while(associated(otherPatch))
+       do p = 1,numpft
+          allpatches_recruitment_modifier(p) = allpatches_recruitment_modifier(p) + &
+               exp(-EDPftvarcon_inst%germination_canopy_openness_param(p) * &
+               otherPatch%total_tree_area / otherPatch%area) * otherPatch%area/AREA
+       end do
+       otherPatch => otherPatch%younger
+    end do !otherPatch
 
     ! germination_timescale is being pulled to PFT parameter; units are 1/yr
     ! thus the mortality rate of seed -> recruit (in units of carbon) 
@@ -840,7 +861,9 @@ contains
 
     do p = 1,numpft
        currentPatch%seed_germination(p) =  min(currentSite%seed_bank(p) * &
-             EDPftvarcon_inst%germination_timescale(p),max_germination)
+             EDPftvarcon_inst%germination_timescale(p) * & 
+             recruitment_modifier(p)/allpatches_recruitment_modifier(p), &
+             max_germination)
     enddo
 
   end subroutine seed_germination
@@ -1682,7 +1705,6 @@ contains
     real(r8) :: b_sapwood     ! sapwood biomass [kgC]
     real(r8) :: b_agw         ! Above ground biomass [kgC]
     real(r8) :: b_bgw         ! Below ground biomass [kgC]
-
     !----------------------------------------------------------------------
 
     allocate(temp_cohort) ! create temporary cohort

@@ -92,6 +92,7 @@ module EDPftvarcon
      real(r8), allocatable :: jmaxse(:)
      real(r8), allocatable :: tpuse(:)
      real(r8), allocatable :: germination_timescale(:)
+     real(r8), allocatable :: germination_canopy_openness_param(:)
      real(r8), allocatable :: seed_decay_turnover(:)
      real(r8), allocatable :: branch_turnover(:)         ! Turnover time for branchfall on live trees [yr-1]
      real(r8), allocatable :: trim_limit(:)              ! Limit to reductions in leaf area w stress (m2/m2)
@@ -660,6 +661,10 @@ contains
     call fates_params%RegisterParameter(name=name, dimension_shape=dimension_shape_1d, &
          dimension_names=dim_names, lower_bounds=dim_lower_bound)
 
+    name = 'fates_seed_germination_canopy_openness_param'
+    call fates_params%RegisterParameter(name=name, dimension_shape=dimension_shape_1d, &
+         dimension_names=dim_names, lower_bounds=dim_lower_bound)
+
     name = 'fates_seed_decay_turnover'
     call fates_params%RegisterParameter(name=name, dimension_shape=dimension_shape_1d, &
          dimension_names=dim_names, lower_bounds=dim_lower_bound)
@@ -1095,6 +1100,10 @@ contains
     name = 'fates_seed_germination_timescale'
     call fates_params%RetreiveParameterAllocate(name=name, &
          data=this%germination_timescale)
+
+    name = 'fates_seed_germination_canopy_openness_param'
+    call fates_params%RetreiveParameterAllocate(name=name, &
+         data=this%germination_canopy_openness_param)
 
     name = 'fates_seed_decay_turnover'
     call fates_params%RetreiveParameterAllocate(name=name, &
@@ -1542,6 +1551,7 @@ contains
         write(fates_log(),fmt0) 'jmaxse = ',EDPftvarcon_inst%jmaxse
         write(fates_log(),fmt0) 'tpuse = ',EDPftvarcon_inst%tpuse
         write(fates_log(),fmt0) 'germination_timescale = ',EDPftvarcon_inst%germination_timescale
+        write(fates_log(),fmt0) 'germination_canopy_openness_param = ',EDPftvarcon_inst%germination_canopy_openness_param
         write(fates_log(),fmt0) 'seed_decay_turnover = ',EDPftvarcon_inst%seed_decay_turnover
         write(fates_log(),fmt0) 'branch_turnover = ',EDPftvarcon_inst%branch_turnover
         write(fates_log(),fmt0) 'trim_limit = ',EDPftvarcon_inst%trim_limit

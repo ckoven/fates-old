@@ -380,6 +380,9 @@ variables:
 	float fates_seed_decay_turnover(fates_pft) ;
 		fates_seed_decay_turnover:units = "1/yr" ;
 		fates_seed_decay_turnover:long_name = "turnover time for seeds with respect to germination" ;
+        float fates_seed_germination_canopy_openness_param(fates_pft) ;
+                fates_seed_germination_canopy_openness_param:units = "unitless" ;
+                fates_seed_germination_canopy_openness_param:long_name = "tendency for seeds to germinate in more open patches: 0 = germinate evenly; large value => only germinate in open patches" ;
 	float fates_seed_germination_timescale(fates_pft) ;
 		fates_seed_germination_timescale:units = "1/yr" ;
 		fates_seed_germination_timescale:long_name = "turnover time for seeds with respect to decay" ;
@@ -848,6 +851,8 @@ data:
  fates_seed_dbh_repro_threshold = 150, 150 ;
 
  fates_seed_decay_turnover = 0.51, 0.51 ;
+
+ fates_seed_germination_canopy_openness_param = 0., 0. ;
 
  fates_seed_germination_timescale = 0.5, 0.5 ;
 
