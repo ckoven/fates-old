@@ -820,6 +820,7 @@ contains
     !
     ! !USES:
     use EDPftvarcon       , only : EDPftvarcon_inst
+    use EDTypesMod, only : AREA
     !
     ! !ARGUMENTS    
     type(ed_site_type), intent(inout), target  :: currentSite
@@ -838,16 +839,16 @@ contains
     ! but also renormalize so that the total germination rate across all patches equals the germination timescale
 
     do p = 1,numpft
-       recruitment_modifier(p) = exp(-EDPftvarcon_inst%%germination_canopy_openness_param(p) * &
+       recruitment_modifier(p) = exp(-EDPftvarcon_inst%germ_can_openness_param(p) * &
             currentPatch%total_tree_area / currentPatch%area)
     end do
 
     allpatches_recruitment_modifier(1:maxpft) = 0._r8
-    otherPatch => sites(s)%oldest_patch
+    otherPatch => currentSite%oldest_patch
     do while(associated(otherPatch))
        do p = 1,numpft
           allpatches_recruitment_modifier(p) = allpatches_recruitment_modifier(p) + &
-               exp(-EDPftvarcon_inst%germination_canopy_openness_param(p) * &
+               exp(-EDPftvarcon_inst%germ_can_openness_param(p) * &
                otherPatch%total_tree_area / otherPatch%area) * otherPatch%area/AREA
        end do
        otherPatch => otherPatch%younger
