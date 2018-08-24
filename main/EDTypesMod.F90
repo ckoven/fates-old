@@ -399,6 +399,7 @@ module EDTypesMod
      real(r8) :: seeds_in(maxpft)                               ! seed production KgC/m2/year
      real(r8) :: seed_decay(maxpft)                             ! seed decay in KgC/m2/year
      real(r8) :: seed_germination(maxpft)                       ! germination rate of seed pool in KgC/m2/year
+     real(r8) :: recruitment_rate(1:maxpft)                     ! number of individuals that were recruited into new cohorts (n/yr)
 
      ! PHOTOSYNTHESIS       
 
@@ -585,11 +586,10 @@ module EDTypesMod
      ! PLANT HYDRAULICS
      type(ed_site_hydr_type), pointer :: si_hydr
         
-     ! TERMINATION, RECRUITMENT, DEMOTION, and DISTURBANCE
+     ! TERMINATION, DEMOTION, and DISTURBANCE
 
      real(r8), allocatable :: terminated_nindivs(:,:,:) ! number of individuals that were in cohorts which were terminated this timestep, on size x pft x canopy array. 
      real(r8) :: termination_carbonflux(2)                     ! carbon flux from live to dead pools associated with termination mortality, per canopy level
-     real(r8) :: recruitment_rate(1:maxpft)                     ! number of individuals that were recruited into new cohorts
      real(r8), allocatable :: demotion_rate(:)                ! rate of individuals demoted from canopy to understory per FATES timestep
      real(r8) :: demotion_carbonflux                           ! biomass of demoted individuals from canopy to understory [kgC/ha/day]
      real(r8), allocatable :: promotion_rate(:)               ! rate of individuals promoted from understory to canopy per FATES timestep

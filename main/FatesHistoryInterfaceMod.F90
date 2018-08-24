@@ -103,6 +103,7 @@ module FatesHistoryInterfaceMod
   ! Indices to site by patch age by pft variables
   integer, private :: ih_biomass_si_agepft
   integer, private :: ih_npp_si_agepft
+  integer, private :: ih_recruitment_si_agepft
 
   ! Indices to (site) variables
   integer, private :: ih_nep_si
@@ -1466,6 +1467,7 @@ end subroutine flush_hvars
                hio_npp_stor_understory_si_scls     => this%hvars(ih_npp_stor_understory_si_scls)%r82d, &
                hio_nplant_si_scagpft                => this%hvars(ih_nplant_si_scagpft)%r82d, &
                hio_npp_si_agepft                    => this%hvars(ih_npp_si_agepft)%r82d, &
+               hio_recruitment_si_agepft                    => this%hvars(ih_recruitment_si_agepft)%r82d, &
                hio_biomass_si_agepft                => this%hvars(ih_biomass_si_agepft)%r82d, &
                hio_yesterdaycanopylevel_canopy_si_scls     => this%hvars(ih_yesterdaycanopylevel_canopy_si_scls)%r82d, &
                hio_yesterdaycanopylevel_understory_si_scls => this%hvars(ih_yesterdaycanopylevel_understory_si_scls)%r82d, &
@@ -2055,6 +2057,17 @@ end subroutine flush_hvars
                     cpatch%CWD_BG_OUT(i_cwd)*cpatch%area * AREA_INV * g_per_kg
             end do
 
+            ! pass the recruitment rate as a flux to the history, and then reset the recruitment buffer
+            do i_pft = 1, numpft
+               hio_recruitment_si_pft(io_si,i_pft) = hio_recruitment_si_pft(io_si,i_pft) + &
+                    cpatch%recruitment_rate(i_pft) * days_per_year
+               !
+               iagepft = get_agepft_class_index(cpatch%age,i_pft)
+               hio_recruitment_si_agepft(io_si,iagepft) = hio_recruitment_si_agepft(io_si,iagepft) + &
+                    cpatch%recruitment_rate(i_pft) * days_per_year
+            end do
+            cpatch%recruitment_rate(:) = 0._r8
+
             ipa = ipa + 1
             cpatch => cpatch%younger
          end do !patch loop
@@ -2118,12 +2131,6 @@ end subroutine flush_hvars
          sites(s)%terminated_nindivs(:,:,:) = 0._r8
          sites(s)%imort_carbonflux = 0._r8
          sites(s)%imort_rate(:,:) = 0._r8
-
-         ! pass the recruitment rate as a flux to the history, and then reset the recruitment buffer
-         do i_pft = 1, numpft
-            hio_recruitment_si_pft(io_si,i_pft) = sites(s)%recruitment_rate(i_pft) * days_per_year
-         end do
-         sites(s)%recruitment_rate(:) = 0._r8
 
          ! summarize all of the mortality fluxes by PFT
          do i_pft = 1, numpft
@@ -3102,6 +3109,11 @@ end subroutine flush_hvars
          long='Rate of recruitment by PFT', use_default='active',       &
          avgflag='A', vtype=site_pft_r8, hlms='CLM:ALM', flushval=0.0_r8, upfreq=1, &
          ivar=ivar, initialize=initialize_variables, index = ih_recruitment_si_pft )
+
+    call this%set_history_var(vname='RECRUITMENT_AGEPFT',  units='indiv/ha/yr',            &
+         long='Rate of recruitment by PFT', use_default='inactive',       &
+         avgflag='A', vtype=site_agepft_r8, hlms='CLM:ALM', flushval=0.0_r8, upfreq=1, &
+         ivar=ivar, initialize=initialize_variables, index = ih_recruitment_si_agepft )
 
     call this%set_history_var(vname='MORTALITY',  units='indiv/ha/yr',            &
          long='Rate of total mortality by PFT', use_default='active',       &
